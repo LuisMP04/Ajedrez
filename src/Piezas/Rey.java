@@ -1,14 +1,16 @@
 package Piezas;
 
+import Reglas.Clavada;
+import Reglas.DireccionRayo;
 import Reglas.Jaqueable;
 import Tablero.Movimiento;
 import Tablero.Tablero;
-import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Rey extends Pieza implements Jaqueable
 {
-    private ArrayList<Movimiento> movPeligrosos = new ArrayList<>();
-    private ArrayList<Movimiento> casillasBloqueadas = new ArrayList<>();
+    //private ArrayList<Movimiento> movPeligrosos = new ArrayList<>();
+    //private ArrayList<Movimiento> casillasBloqueadas = new ArrayList<>();
     private int jaque = 0;  //0 = no jaque, 1 = jaque
 
     public Rey(int bando, TipoPieza tipoPieza)
@@ -50,229 +52,8 @@ public class Rey extends Pieza implements Jaqueable
         }
     }
 
-    //fase 1 del preprocesamiento
-    public void calcularAreaPeligrosa(Tablero casillas, Movimiento movimiento)
-    {
-        //asumiendo que el rey está completamente solo, siempre tendrá un área (zona) en la que cualquier pieza podría atacarlo
-        //int i = posicion[0], j = posicion[1];
-        int movi = movimiento.i, movj = movimiento.j;
-
-        //calcular todas las casillas en las que podría haber una pieza que la ataque
-        /*  heuristica:
-                - Arriba
-                - Arriba y derecha
-                - Derecha
-                - Abajo y derecha
-                - Abajo
-                - Abajo e izquierda
-                - Izquierda
-                - Arriba e izquierda
-                - Todos los movimientos del caballo
-        */
-
-        int incI, incJ;
-        //Arriba (-i)
-        for(incI = 1; incI <= 7; incI++)
-        {
-            if(movi - incI >= 0)
-            {
-                movPeligrosos.add(new Movimiento(movi-incI, movj));
-            }
-        }
-        //Arriba y derecha (-i +j)
-        incJ = 1;
-        for(incI = 1; incI <= 7; incI++)
-        {
-            if(movi - incI >= 0 && movj + incJ <= 7)
-            {
-                movPeligrosos.add(new Movimiento(movi-incI, movj+incJ));
-            }
-            incJ += 1;
-        }
-        //Derecha (+j)
-        for(incJ = 1; incJ <= 7; incJ++)
-        {
-            if(movj + incJ <= 7)
-            {
-                movPeligrosos.add(new Movimiento(movi, movj+incJ));
-            }
-        }
-        //Abajo y derecha (+i +j)
-        incJ = 1;
-        for(incI = 1; incI <= 7; incI++)
-        {
-            if(movi + incI <= 7 && movj + incJ <= 7)
-            {
-                movPeligrosos.add(new Movimiento(movi+incI, movj+incJ));
-            }
-            incJ += 1;
-        }
-        //Abajo (+i)
-        for(incI = 1; incI <= 7; incI++)
-        {
-            if(movi + incI <= 7)
-            {
-                movPeligrosos.add(new Movimiento(movi+incI, movj));
-            }
-        }
-        //Abajo e izquierda (+i -j)
-        incJ = 1;
-        for(incI = 1; incI <= 7; incI++)
-        {
-            if(movi + incI <= 7 && movj - incJ >= 0)
-            {
-                movPeligrosos.add(new Movimiento(movi+incI, movj-incJ));
-            }
-            incJ += 1;
-        }
-        //Izquierda (-j)
-        for(incJ = 1; incJ <= 7; incJ++)
-        {
-            if(movj - incJ >= 0)
-            {
-                movPeligrosos.add(new Movimiento(movi, movj-incJ));
-            }
-        }
-        //Arriba e izquierda (-i -j)
-        incJ = 1;
-        for(incI = 1; incI <= 7; incI++)
-        {
-            if(movi - incI >= 0 && movj - incJ >= 0)
-            {
-                movPeligrosos.add(new Movimiento(movi-incI, movj-incJ));
-            }
-            incJ += 1;
-        }
-
-        /*----Movimientos del caballo----*/
-        //Arriba-2 y derecha (--i +j)
-        if(movi - 2 >= 0 && movj + 1 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi-2, movj+1));
-        }
-        //Arriba y derecha+2 (-i ++j)
-        if(movi - 1 >= 0 && movj + 2 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi-1, movj+2));
-        }
-        //Abajo y derecha+2 (+i ++j)
-        if(movi + 1 <= 7 && movj + 2 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi+1, movj+2));
-        }
-        //Abajo+2 y derecha (++i +j)
-        if(movi + 2 <= 7 && movj + 1 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi+2, movj+1));
-        }
-        //Abajo+2 e izquierda (++i -j)
-        if(movi + 2 <= 7 && movj - 1 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi+2, movj-1));
-        }
-        //Abajo e izquierda-2 (+i --j)
-        if(movi + 1 <= 7 && movj - 2 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi+1, movj-2));
-        }
-        //Arriba e izquierda-2 (-i --j)
-        if(movi - 1 >= 0 && movj - 2 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi-1, movj-2));
-        }
-        //Arriba+2 e izquierda (--i -j)
-        if(movi - 2 >= 0 && movj - 1 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi-2, movj-1));
-        }
-        /*
-        //Mas movimientos, dios mio que pedo con el caballo
-        //Arriba+3 e izquierda-1 (---i -j)
-        if(movi - 3 >= 0 && movj - 1 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi-3, movj-1));
-        }
-        //Arriba+1 e izquierda-3 (-i ---j)
-        if(movi - 1 >= 0 && movj - 3 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi-1, movj-3));
-        }
-        //Abajo-1 e izquierda-3 (+i ---j)
-        if(movi + 1 <= 7 && movj - 3 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi+1, movj-3));
-        }
-        //Abajo-3 e izquierda-1 (+++i -j)
-        if(movi + 3 <= 7 && movj - 1 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi+3, movj-1));
-        }
-        //Abajo-3 y derecha+1 (+++i +j)
-        if(movi + 3 <= 7 && movj + 1 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi+3, movj+1));
-        }
-        //Abajo-1 y derecha+3 (+i +++j)
-        if(movi + 1 <= 7 && movj + 3 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi+1, movj+3));
-        }
-        //Arriba+1 y derecha+3 (-i +++j)
-        if(movi - 1 >= 0 && movj + 3 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi-1, movj+3));
-        }
-        //Arriba+3 y derecha+1 (---i +j)
-        if(movi - 3 >= 0 && movj + 1 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi-3, movj+1));
-        }
-        //AUN MAS MOVIMIENTOS QUE PODRIAN NEGAR JUGADAS
-        //MALDITO CABALLO
-        //Arriba+3 e izquierda-2 (---i --j)
-        if(movi - 3 >= 0 && movj - 2 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi-3, movj-2));
-        }
-        //Arriba+2 e izquierda-3 (--i ---j)
-        if(movi - 2 >= 0 && movj - 3 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi-2, movj-3));
-        }
-        //Abajo-2 e izquierda-3 (++i ---j)
-        if(movi + 2 <= 7 && movj - 3 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi+2, movj-3));
-        }
-        //Abajo-3 e izquierda-2 (+++i --j)
-        if(movi + 3 <= 7 && movj - 2 >= 0)
-        {
-            movPeligrosos.add(new Movimiento(movi+3, movj-2));
-        }
-        //Abajo+3 y derecha+2 (+++i ++j)
-        if(movi+3 <= 7 && movj + 2 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi+3, movj+2));
-        }
-        //Abajo+2 y derecha+3 (++i +++j)
-        if(movi+2 <= 7 && movj + 3 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi+2, movj+3));
-        }
-        //Arriba+2 y derecha+3 (--i +++j)
-        if(movi-2 >= 0 && movj + 3 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi-2, movj+3));
-        }
-        //Arriba+3 y derecha+2 (---i ++j)
-        if(movi-3 >= 0 && movj + 2 <= 7)
-        {
-            movPeligrosos.add(new Movimiento(movi-3, movj+2));
-        }
-        */
-    }
-
-    public boolean casillasAtacadas(Tablero casillas, int i, int j)
+    // Función que retorna true si la casilla está atacada o false si no lo está
+    private boolean casillasAtacadas(Tablero casillas, int i, int j)
     {
         int movi = i, movj = j;
         Pieza[][] pieza = casillas.getCasillas();
@@ -280,6 +61,8 @@ public class Rey extends Pieza implements Jaqueable
 
         //calcular todas las casillas en las que podría haber una pieza que la ataque
         /*  heuristica:
+                * Rey enemigo
+                - 1 casilla en todas las direcciones alrededor
                 * Peones (depende del bando)
                     * Rey Blanco - Peon Negro
                     - Arriba y derecha (-i +j) y Arriba e izquierda (-i -j)
@@ -295,176 +78,956 @@ public class Rey extends Pieza implements Jaqueable
                 - Todos los movimientos del caballo
         */
 
+        //Rey enemigo
+        //Arriba (-i)
+        if(movi - 1 >= 0 && 
+            pieza[movi-1][movj] != null &&
+            pieza[movi-1][movj].getBando() != this.bando &&
+            pieza[movi-1][movj].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA");
+            return true;
+        }
+
+        //Abajo (+i)
+        if(movi + 1 <= 7 && 
+            pieza[movi+1][movj] != null &&
+            pieza[movi+1][movj].getBando() != this.bando &&
+            pieza[movi+1][movj].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO");
+            return true;
+        }
+
+        //Derecha (+j)
+        if(movj + 1 <= 7 && 
+            pieza[movi][movj+1] != null &&
+            pieza[movi][movj+1].getBando() != this.bando &&
+            pieza[movi][movj+1].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO A LA DERECHA");
+            return true;
+        }
+
+        //Izquierda (-j)
+        if(movj - 1>= 0 && 
+            pieza[movi][movj-1] != null &&
+            pieza[movi][movj-1].getBando() != this.bando &&
+            pieza[movi][movj-1].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO A LA IZQUIERDA");
+            return true;
+        }
+
+        //Arriba y derecha (-i +j)
+        if(movi - 1 >= 0 && movj + 1 <= 7 && 
+            pieza[movi-1][movj+1] != null &&
+            pieza[movi-1][movj+1].getBando() != this.bando &&
+            pieza[movi-1][movj+1].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA A LA DERECHA");
+            return true;
+        }
+
+        //Abajo y derecha (+i +j)
+        if(movi + 1 <= 7 && movj + 1 <= 7 && 
+            pieza[movi+1][movj+1] != null &&
+            pieza[movi+1][movj+1].getBando() != this.bando &&
+            pieza[movi+1][movj+1].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO A LA DERECHA");
+            return true;
+        }
+        
+        //Arriba e izquierda (-i -j)
+        if(movi - 1 >= 0 && movj - 1 >= 0 &&
+            pieza[movi-1][movj-1] != null &&
+            pieza[movi-1][movj-1].getBando() != this.bando &&
+            pieza[movi-1][movj-1].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA A LA IZQUIERDA");
+            return true;
+        }
+
+        //Abajo e izquierda (+i -j)
+        if(movi + 1 <= 7 && movj - 1 >= 0 &&
+            pieza[movi+1][movj-1] != null &&
+            pieza[movi+1][movj-1].getBando() != this.bando &&
+            pieza[movi+1][movj-1].getTipoPieza() == TipoPieza.REY)
+        {
+            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO A LA IZQUIERDA");
+            return true;
+        }
+
         // Peones
         if(this.bando == 0)
         {
             //Arriba y derecha
-            if(movi - 1 >= 0 && movj + j <= 7 && 
+            if(movi - 1 >= 0 && movj + 1 <= 7 && 
                 pieza[movi-1][movj+1] != null &&
                 pieza[movi-1][movj+1].getBando() != this.bando &&
                 pieza[movi-1][movj+1].getTipoPieza() == TipoPieza.PEON)
             {
                 System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA DERECHA");
-                return false;
+                return true;
             }
             //Arriba e izquierda
-            if(movi - 1 >= 0 && movj - j >= 0 && 
+            if(movi - 1 >= 0 && movj - 1 >= 0 && 
                 pieza[movi-1][movj-1] != null &&
                 pieza[movi-1][movj-1].getBando() != this.bando &&
                 pieza[movi-1][movj-1].getTipoPieza() == TipoPieza.PEON)
             {
                 System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA IZQUIERDA");
-                return false;
+                return true;
             }
         }
         else
         {
             //Abajo y derecha
-            if(movi + 1 <= 7 && movj + j <= 7 && 
+            if(movi + 1 <= 7 && movj + 1 <= 7 && 
                 pieza[movi+1][movj+1] != null &&
                 pieza[movi+1][movj+1].getBando() != this.bando &&
                 pieza[movi+1][movj+1].getTipoPieza() == TipoPieza.PEON)
             {
                 System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA DERECHA");
-                return false;
+                return true;
             }
             //Abajo e izquierda
-            if(movi + 1 <= 7 && movj - j >= 0 && 
+            if(movi + 1 <= 7 && movj - 1 >= 0 && 
                 pieza[movi+1][movj-1] != null &&
                 pieza[movi+1][movj-1].getBando() != this.bando &&
                 pieza[movi+1][movj-1].getTipoPieza() == TipoPieza.PEON)
             {
                 System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA IZQUIERDA");
-                return false;
+                return true;
             }
         }
 
-        /*for(int bD = 0; i < 7; i++)
+        //Buscar en cada rayo (cada dirección)
+        if(busquedaArriba(casillas, i, j))
         {
-            banderaDirecciones[bD] = 0;
-        }*/
-
-        int incJ;
-        for(int incI = 1; incI <= 7; incI++)
-        {
-            incJ = incI;
-            //Arriba
-            if(movi - incI >= 0 && pieza[movi-incI][movj] != null && 
-                                    pieza[movi-incI][movj].getBando() != this.bando &&
-                                    (pieza[movi-incI][movj].getTipoPieza() == TipoPieza.TORRE ||
-                                    pieza[movi-incI][movj].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ARRIBA");
-                return false;
-            }
-            //Abajo
-            if(movi + incI <= 7 && pieza[movi+incI][movj] != null && 
-                                    pieza[movi+incI][movj].getBando() != this.bando &&
-                                    (pieza[movi+incI][movj].getTipoPieza() == TipoPieza.TORRE ||
-                                    pieza[movi+incI][movj].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ABAJO");
-                return false;
-            }
-            //Izquierda
-            if(movj - incJ >= 0 && pieza[movi][movj-incJ] != null && 
-                                    pieza[movi][movj-incJ].getBando() != this.bando &&
-                                    (pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.TORRE ||
-                                    pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA IZQUIERDA");
-                return false;
-            }
-            //Derecha
-            if(movj + incJ <= 7 && pieza[movi][movj+incJ] != null && 
-                                    pieza[movi][movj+incJ].getBando() != this.bando &&
-                                    (pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.TORRE ||
-                                    pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA DERECHA");
-                return false;
-            }
-            //Arriba y derecha
-            if(movi - incI >= 0 && movj + incJ <= 7 && pieza[movi-incI][movj+incJ] != null && 
-                                    pieza[movi-incI][movj+incJ].getBando() != this.bando &&
-                                    (pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
-                                    pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-DERECHA");
-                return false;
-            }
-            //Abajo y derecha
-            if(movi + incI <= 7 && movj + incJ <= 7 && pieza[movi+incI][movj+incJ] != null && 
-                                    pieza[movi+incI][movj+incJ].getBando() != this.bando &&
-                                    (pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
-                                    pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-DERECHA");
-                return false;
-            }
-            //Arriba e izquierda
-            if(movi - incI >= 0 && movj - incJ >= 0 && pieza[movi-incI][movj-incJ] != null &&
-                                    pieza[movi-incI][movj-incJ].getBando() != this.bando &&
-                                    (pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
-                                    pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-IZQUIERDA");
-                return false;
-            }
-            //Abajo e izquierda
-            if(movi + incI <= 7 && movj - incJ >= 0 && pieza[movi+incI][movj-incJ] != null &&
-                                    pieza[movi+incI][movj-incJ].getBando() != this.bando &&
-                                    (pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
-                                    pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
-            {
-                System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-IZQUIERDA");
-                return false;
-            }
+            return true;
         }
+        if(busquedaAbajo(casillas, i, j))
+        {
+            return true;
+        }
+        if(busquedaDerecha(casillas, i, j))
+        {
+            return true;
+        }
+        if(busquedaIzquierda(casillas, i, j))
+        {
+            return true;
+        }
+        if(busquedaArribaDerecha(casillas, i, j))
+        {
+            return true;
+        }
+        if(busquedaAbajoDerecha(casillas, i, j))
+        {
+            return true;
+        }
+        if(busquedaArribaIzquierda(casillas, i, j))
+        {
+            return true;
+        }
+        if(busquedaAbajoIzquierda(casillas, i, j))
+        {
+            return true;
+        }
+
 
         /*----Movimientos del caballo----*/
         //Arriba-2 y derecha (--i +j)
-        if(movi - 2 >= 0 && movj + 1 <= 7)
+        if(movi - 2 >= 0 && movj + 1 <= 7 && pieza[movi-2][movj+1] != null &&
+                                             pieza[movi-2][movj+1].getBando() != this.bando &&
+                                             pieza[movi-2][movj+1].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi-2, movj+1));
+            //movPeligrosos.add(new Movimiento(movi-2, movj+1));
+            return true;
         }
         //Arriba y derecha+2 (-i ++j)
-        if(movi - 1 >= 0 && movj + 2 <= 7)
+        if(movi - 1 >= 0 && movj + 2 <= 7 && pieza[movi-1][movj+2] != null &&
+                                             pieza[movi-1][movj+2].getBando() != this.bando &&
+                                             pieza[movi-1][movj+2].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi-1, movj+2));
+            //movPeligrosos.add(new Movimiento(movi-1, movj+2));
+            return true;
         }
         //Abajo y derecha+2 (+i ++j)
-        if(movi + 1 <= 7 && movj + 2 <= 7)
+        if(movi + 1 <= 7 && movj + 2 <= 7 && pieza[movi+1][movj+2] != null &&
+                                             pieza[movi+1][movj+2].getBando() != this.bando &&
+                                             pieza[movi+1][movj+2].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi+1, movj+2));
+            //movPeligrosos.add(new Movimiento(movi+1, movj+2));
+            return true;
         }
         //Abajo+2 y derecha (++i +j)
-        if(movi + 2 <= 7 && movj + 1 <= 7)
+        if(movi + 2 <= 7 && movj + 1 <= 7 && pieza[movi+2][movj+1] != null &&
+                                             pieza[movi+2][movj+1].getBando() != this.bando &&
+                                             pieza[movi+2][movj+1].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi+2, movj+1));
+            //movPeligrosos.add(new Movimiento(movi+2, movj+1));
+            return true;
         }
         //Abajo+2 e izquierda (++i -j)
-        if(movi + 2 <= 7 && movj - 1 >= 0)
+        if(movi + 2 <= 7 && movj - 1 >= 0 && pieza[movi+2][movj-1] != null &&
+                                             pieza[movi+2][movj-1].getBando() != this.bando &&
+                                             pieza[movi+2][movj-1].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi+2, movj-1));
+            //movPeligrosos.add(new Movimiento(movi+2, movj-1));
+            return true;
         }
         //Abajo e izquierda-2 (+i --j)
-        if(movi + 1 <= 7 && movj - 2 >= 0)
+        if(movi + 1 <= 7 && movj - 2 >= 0 && pieza[movi+1][movj-2] != null &&
+                                             pieza[movi+1][movj-2].getBando() != this.bando &&
+                                             pieza[movi+1][movj-2].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi+1, movj-2));
+            //movPeligrosos.add(new Movimiento(movi+1, movj-2));
+            return true;
         }
         //Arriba e izquierda-2 (-i --j)
-        if(movi - 1 >= 0 && movj - 2 >= 0)
+        if(movi - 1 >= 0 && movj - 2 >= 0 && pieza[movi-1][movj-2] != null &&
+                                             pieza[movi-1][movj-2].getBando() != this.bando &&
+                                             pieza[movi-1][movj-2].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi-1, movj-2));
+            //movPeligrosos.add(new Movimiento(movi-1, movj-2));
+            return true;
         }
         //Arriba+2 e izquierda (--i -j)
-        if(movi - 2 >= 0 && movj - 1 >= 0)
+        if(movi - 2 >= 0 && movj - 1 >= 0 && pieza[movi-2][movj-1] != null &&
+                                             pieza[movi-2][movj-1].getBando() != this.bando &&
+                                             pieza[movi-2][movj-1].getTipoPieza() == TipoPieza.CABALLO)
         {
-            movPeligrosos.add(new Movimiento(movi-2, movj-1));
+            //movPeligrosos.add(new Movimiento(movi-2, movj-1));
+            return true;
         }
 
+        return false;
+    }
+
+    public void invalidarCasillasAtacadas(Tablero casillas)
+    {
+        //verificar que la lista de movimientos no esté vacía
+        if(listaMovimientos.isEmpty())
+        {
+            return;
+        }
+
+        Iterator<Movimiento> it = listaMovimientos.iterator();
+
+        Movimiento m;
+        //comprobar si cada movimiento está disponible
+        while(it.hasNext())
+        {
+            m = it.next();
+            System.out.println("DEBUG: Comprobando en: [" + (8 - m.i) + "|" + (char)(m.j + 65) + "]");
+            //si ese movimiento está atacado
+            if(casillasAtacadas(casillas, m.i, m.j) == true)
+            {
+                //invalidarlo
+                it.remove();
+            }
+        }
+    }
+
+    // Busqueda por rayos para movimientos ilegales
+    //Arriba
+    private boolean busquedaArriba(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            if(movi - incI < 0)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+
+            if(pieza[movi-incI][movj] != null)
+            {
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi-incI][movj].getBando() != this.bando &&
+                    (pieza[movi-incI][movj].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi-incI][movj].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ARRIBA");
+                    return true;
+                }
+
+                //cualquier otra pieza bloquea el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Abajo
+    private boolean busquedaAbajo(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            if(movi + incI > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            
+            if(pieza[movi+incI][movj] != null)
+            {
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi+incI][movj].getBando() != this.bando &&
+                    (pieza[movi+incI][movj].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi+incI][movj].getTipoPieza() == TipoPieza.DAMA))
+                {
+            
+                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ABAJO");
+                    return true;
+                }
+
+                //cualquier otra pieza bloquea el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Derecha
+    private boolean busquedaDerecha(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movj + incJ > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            if(pieza[movi][movj+incJ] != null)
+            {
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi][movj+incJ].getBando() != this.bando &&
+                    (pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA DERECHA");
+                    return true;
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Izquierda
+    private boolean busquedaIzquierda(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            //parar busqueda de ese rayo por salirse del rango
+            if(movj - incJ < 0)
+            {
+                break;
+            }
+
+            if(pieza[movi][movj-incJ] != null)
+            { 
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi][movj-incJ].getBando() != this.bando &&
+                    (pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA IZQUIERDA");
+                    return true;
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Arriba y derecha
+    private boolean busquedaArribaDerecha(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi - incI < 0 || movj + incJ > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            if(pieza[movi-incI][movj+incJ] != null)
+            {   
+                //si hay pieza enemiga y amenaza en este rayo                                 
+                if(pieza[movi-incI][movj+incJ].getBando() != this.bando &&
+                    (pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-DERECHA");
+                    return true;
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Abajo y derecha
+    private boolean busquedaAbajoDerecha(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi + incI > 7 || movj + incJ > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            
+            if(pieza[movi+incI][movj+incJ] != null)
+            {
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi+incI][movj+incJ].getBando() != this.bando &&
+                    (pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-DERECHA");
+                    return true;
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Arriba e izquierda
+    private boolean busquedaArribaIzquierda(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi - incI < 0 || movj - incJ < 0)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            
+            if(pieza[movi-incI][movj-incJ] != null)
+            {
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi-incI][movj-incJ].getBando() != this.bando &&
+                    (pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-IZQUIERDA");
+                    return true;
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+
+        return false;
+    }
+    //Abajo e izquierda
+    private boolean busquedaAbajoIzquierda(Tablero casillas, int i, int j)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi + incI > 7 || movj - incJ < 0)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            if(pieza[movi+incI][movj-incJ] != null)
+            {
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi+incI][movj-incJ].getBando() != this.bando &&
+                    (pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-IZQUIERDA");
+                    return true;
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+    
+        return false;
+    }
+
+    private boolean calcularPiezasClavadas(Tablero casillas, int i, int j)
+    {
+        //Primero se debe encontrar alguna pieza
+        //Misma busqueda por rayos 
+        
+        Clavada posibleClavada = new Clavada(0, 0);
+        int[][] casillasLogicas = casillas.getCasillasLogicas();
+        
+        //busquedaClavadaArriba(casillas, i, j, posibleClavada);
+        /*if(posibleClavada.estadoAtaque == true)
+        {
+            if(casillasAtacadas(casillas, posibleClavada.i, posibleClavada.j))
+            {
+                //Desactivar esa casilla porque la pieza está clavada
+                casillasLogicas[posibleClavada.i][posibleClavada.j] = 1;
+            }
+        }*/
+
+        // Pieza clavada
         return true;
+    }
+
+    // Busqueda por rayos para piezas clavadas
+    //Arriba
+    private void busquedaClavadasArriba(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            if(movi - incI < 0)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+
+            if(pieza[movi-incI][movj] != null)
+            {
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi-incI][movj].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi-incI;
+                    posibleClavada.j = movj;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi-incI][movj].getBando() != this.bando &&
+                    (pieza[movi-incI][movj].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi-incI][movj].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.ARRIBA;
+                    }   
+                }
+
+                //cualquier otra pieza bloquea el rayo
+                break;
+            }
+        }
+    }
+    //Abajo
+    private void busquedaClavadasAbajo(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            if(movi + incI > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            
+            if(pieza[movi+incI][movj] != null)
+            {
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi+incI][movj].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi+incI;
+                    posibleClavada.j = movj;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi+incI][movj].getBando() != this.bando &&
+                    (pieza[movi+incI][movj].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi+incI][movj].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.ABAJO;
+                    }
+                }
+
+                //cualquier otra pieza bloquea el rayo
+                break;
+            }
+        }
+    }
+    //Derecha
+    private void busquedaClavadasDerecha(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movj + incJ > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            if(pieza[movi][movj+incJ] != null)
+            {
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi][movj+incJ].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi;
+                    posibleClavada.j = movj+incJ;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi][movj+incJ].getBando() != this.bando &&
+                    (pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.DERECHA;
+                    }
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+    }
+    //Izquierda
+    private void busquedaClavadasIzquierda(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            //parar busqueda de ese rayo por salirse del rango
+            if(movj - incJ < 0)
+            {
+                break;
+            }
+
+            if(pieza[movi][movj-incJ] != null)
+            { 
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi][movj-incJ].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi;
+                    posibleClavada.j = movj-incJ;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi][movj-incJ].getBando() != this.bando &&
+                    (pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.TORRE ||
+                    pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.IZQUIERDA;
+                    }   
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+    }
+    //Arriba y derecha
+    private void busquedaClavadasArribaDerecha(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi - incI < 0 || movj + incJ > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            if(pieza[movi-incI][movj+incJ] != null)
+            {   
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi-incI][movj+incJ].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi-incI;
+                    posibleClavada.j = movj+incJ;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo                                 
+                if(pieza[movi-incI][movj+incJ].getBando() != this.bando &&
+                    (pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.ARRIBA_DERECHA;
+                    }   
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+    }
+    //Abajo y derecha
+    private void busquedaClavadasAbajoDerecha(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi + incI > 7 || movj + incJ > 7)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            
+            if(pieza[movi+incI][movj+incJ] != null)
+            {
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi+incI][movj+incJ].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi+incI;
+                    posibleClavada.j = movj+incJ;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi+incI][movj+incJ].getBando() != this.bando &&
+                    (pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.ABAJO_DERECHA;
+                    }
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+    }
+    //Arriba e izquierda
+    private void busquedaClavadasArribaIzquierda(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi - incI < 0 || movj - incJ < 0)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+            
+            if(pieza[movi-incI][movj-incJ] != null)
+            {
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi-incI][movj-incJ].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi-incI;
+                    posibleClavada.j = movj-incJ;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi-incI][movj-incJ].getBando() != this.bando &&
+                    (pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.ARRIBA_IZQUERDA;
+                    }   
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
+    }
+    //Abajo e izquierda
+    private void busquedaClavadasAbajoIzquierda(Tablero casillas, int i, int j, Clavada posibleClavada)
+    {
+        Pieza[][] pieza = casillas.getCasillas();
+        int movi = i, movj = j;
+        int incI, incJ;
+        int aliadasEncontradas = 0;
+
+        for(incI = 1; incI <= 7; incI++)
+        {
+            incJ = incI;
+            if(movi + incI > 7 || movj - incJ < 0)
+            {
+                //parar busqueda de ese rayo por salirse del rango
+                break;
+            }
+
+            if(pieza[movi+incI][movj-incJ] != null)
+            {
+                //si hay pieza aliada en el camino del rayo
+                if(pieza[movi+incI][movj-incJ].getBando() == this.bando)
+                {
+                    //posible clavada
+                    aliadasEncontradas += 1;
+
+                    if(aliadasEncontradas > 1)
+                    {
+                        break;
+                    }
+                    posibleClavada.i = movi+incI;
+                    posibleClavada.j = movj-incJ;
+                    continue;
+                }
+
+                //si hay pieza enemiga y amenaza en este rayo
+                if(pieza[movi+incI][movj-incJ].getBando() != this.bando &&
+                    (pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
+                    pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
+                {
+                    if(aliadasEncontradas == 1)
+                    {
+                        posibleClavada.estado = true;
+                        posibleClavada.rayo = DireccionRayo.ABAJO_IZQUIERDA;
+                    }   
+                }
+
+                //cualquier otra pieza para el rayo
+                break;
+            }
+        }
     }
 
     /*--- Nota ---*/
@@ -474,15 +1037,6 @@ public class Rey extends Pieza implements Jaqueable
     //o las piezas no pueden ser comidas (del bando contrario)
     //una vez hecho eso, se desabilitan las casillas clavadas
     //y sigue el procesamiento (calcularMovimientos)
-
-    public void mostrarAreaPeligrosa()
-    {
-        System.out.println("Area peligrosa de la pieza " + this + " en " + (8 - posicion[0]) + "|" + (char)(posicion[1]+65));
-        for(Movimiento m : movPeligrosos)
-        {
-            System.out.println(m);
-        }
-    }
 
     @Override
     public void actualizarMovimientos(Tablero casillas)
@@ -497,13 +1051,14 @@ public class Rey extends Pieza implements Jaqueable
         int j = posicion[1];
         
         //Abajo a la derecha (+i +j) y abajo
-        if((i+1 <= 7 && j+1 <= 7) &&
+        if((i+1 <= 7 && j+1 <= 7) && 
             casillas.getCasillas()[i+1][j+1] == null)
         {
             listaMovimientos.add(new Movimiento((i+1), (j+1)));
             //listaMovimientos.add(new Movimiento((i+1), (j)));
         }
-        else if((i+1 <= 7 && j+1 <= 7) &&
+        else if((i+1 <= 7 && j+1 <= 7) && 
+            casillas.getCasillas()[i+1][j+1] != null &&
             casillas.getCasillas()[i+1][j+1].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i+1), (j+1)));
@@ -519,7 +1074,8 @@ public class Rey extends Pieza implements Jaqueable
             //listaMovimientos.add(new Movimiento((i), (j-1)));
         }
         else if((i+1 <= 7 && j-1 >= 0) &&
-        casillas.getCasillas()[i+1][j-1].getBando() != this.bando)
+            casillas.getCasillas()[i+1][j-1] != null &&
+            casillas.getCasillas()[i+1][j-1].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i+1), (j-1)));
             //listaMovimientos.add(new Movimiento((i), (j-1)));
@@ -533,7 +1089,8 @@ public class Rey extends Pieza implements Jaqueable
             //listaMovimientos.add(new Movimiento((i-1), (j)));
         }
         else if((i-1 >= 0 && j-1 >= 0) &&
-        casillas.getCasillas()[i-1][j-1].getBando() != this.bando)
+            casillas.getCasillas()[i-1][j-1] != null &&
+            casillas.getCasillas()[i-1][j-1].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i-1), (j-1)));
             //listaMovimientos.add(new Movimiento((i-1), (j)));
@@ -547,7 +1104,8 @@ public class Rey extends Pieza implements Jaqueable
             //listaMovimientos.add(new Movimiento((i), (j+1)));
         }
         else if((i-1 >= 0 && j+1 <= 7) &&
-        casillas.getCasillas()[i-1][j+1].getBando() != this.bando)
+            casillas.getCasillas()[i-1][j+1] != null &&
+            casillas.getCasillas()[i-1][j+1].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i-1), (j+1)));
             //listaMovimientos.add(new Movimiento((i), (j+1)));
@@ -560,6 +1118,7 @@ public class Rey extends Pieza implements Jaqueable
             listaMovimientos.add(new Movimiento((i-1), (j)));
         }
         else if(i-1 >= 0 &&
+            casillas.getCasillas()[i-1][j] != null &&
             casillas.getCasillas()[i-1][j].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i-1), (j)));
@@ -572,6 +1131,7 @@ public class Rey extends Pieza implements Jaqueable
             listaMovimientos.add(new Movimiento((i+1), (j)));
         }
         else if(i+1 <= 7 &&
+            casillas.getCasillas()[i+1][j] != null &&
             casillas.getCasillas()[i+1][j].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i+1), (j)));
@@ -584,6 +1144,7 @@ public class Rey extends Pieza implements Jaqueable
             listaMovimientos.add(new Movimiento((i), (j+1)));
         }
         else if(j+1 <= 7 &&
+            casillas.getCasillas()[i][j+1] != null &&
             casillas.getCasillas()[i][j+1].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i), (j+1)));
@@ -596,6 +1157,7 @@ public class Rey extends Pieza implements Jaqueable
             listaMovimientos.add(new Movimiento((i), (j-1)));
         }
         else if(j-1 >= 0 &&
+            casillas.getCasillas()[i][j-1] != null &&
             casillas.getCasillas()[i][j-1].getBando() != this.bando)
         {
             listaMovimientos.add(new Movimiento((i), (j-1)));

@@ -18,7 +18,7 @@ public class Jugadas implements Comando
     {
         Pieza[][] piezas = casillas.getCasillas();
         
-        int j;|
+        int j;
         for(int i = 0; i < 8; i++)
         {
             for(j = 0; j < 8; j++)

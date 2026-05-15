@@ -24,6 +24,7 @@ public class Dama extends Pieza
         calcularMovmientosB(casillas);
     }
 
+    @Override
     public void calcularMovmientosB(Tablero casillas)
     {
         System.out.println("La pieza es blanca");

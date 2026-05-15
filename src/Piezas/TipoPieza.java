@@ -1,6 +1,6 @@
 package Piezas;
 
-public enum TipoPieza 
+public enum TipoPieza
 {
     PEON,
     ALFIL,

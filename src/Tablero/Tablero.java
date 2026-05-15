@@ -6,6 +6,9 @@ public class Tablero
 {
     private Pieza[][] casillas = new Pieza[8][8];
 
+    // Matriz que indica si hay piezas casillas activadas (0) o casillas desactivadas (1)
+    private int[][] casillasLogicas = new int[8][8];
+
     public Tablero()
     {
         //inicializar el tablero'
@@ -46,6 +49,11 @@ public class Tablero
     public Pieza[][] getCasillas()
     {
         return casillas;
+    }
+
+    public int[][] getCasillasLogicas()
+    {
+        return casillasLogicas;
     }
 
     public Pieza getPieza(int i, char j)
