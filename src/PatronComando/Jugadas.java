@@ -25,7 +25,25 @@ public class Jugadas implements Comando
             {
                 if(piezas[i][j] != null)
                 {
+                    //piezas[i][j].reiniciarMovimientos();
                     piezas[i][j].actualizarMovimientos(casillas);
+                }
+            }
+        }
+    }
+
+    public void reiniciarMovimientos()
+    {
+        Pieza[][] piezas = casillas.getCasillas();
+
+        int j;
+        for(int i = 0; i < 8; i++)
+        {
+            for(j = 0; j < 8; j++)
+            {
+                if(piezas[i][j] != null)
+                {
+                    piezas[i][j].reiniciarMovimientos();
                 }
             }
         }

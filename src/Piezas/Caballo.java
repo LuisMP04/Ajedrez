@@ -21,12 +21,16 @@ public class Caballo extends Pieza
     @Override
     public void actualizarMovimientos(Tablero casillas)
     {
-        calcularMovmientosB(casillas);
+        calcularMovimientosB(casillas);
     }
 
-    public void calcularMovmientosB(Tablero casillas)
+    public void calcularMovimientosB(Tablero casillas)
     {
-        System.out.println("La pieza es blanca");
+        // Si el caballo está clavado, no se puede mover
+        if(clavada.estado == true)
+        {
+            return;
+        }
         int i = posicion[0];
         int j = posicion[1];
         int movi = i, movj = j;
@@ -92,7 +96,12 @@ public class Caballo extends Pieza
         }
     }
 
-    public void calcularMovmientosN(Tablero casillas){}
+    public void calcularMovimientosN(Tablero casillas){}
+
+    protected void reiniciarDirecciones()
+    {
+        
+    }
 
     @Override
     public String toString()

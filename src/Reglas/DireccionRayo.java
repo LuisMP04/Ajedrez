@@ -9,6 +9,6 @@ public enum DireccionRayo
     IZQUIERDA,
     ARRIBA_DERECHA,
     ABAJO_DERECHA,
-    ARRIBA_IZQUERDA,
+    ARRIBA_IZQUIERDA,
     ABAJO_IZQUIERDA
 }

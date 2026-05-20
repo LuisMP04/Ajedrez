@@ -1,5 +1,6 @@
 package Piezas;
 
+import Reglas.Clavada;
 import Reglas.Jaqueable;
 import Tablero.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public abstract class Pieza
     protected ArrayList<Movimiento> listaMovimientos;
     protected int bando; //0 = blanco, 1 = negro;
     protected TipoPieza tipoPieza;
+    protected Clavada clavada;
 
     public Pieza()
     {
@@ -18,20 +20,24 @@ public abstract class Pieza
 
     public Pieza(int bando, TipoPieza tipoPieza)
     {
+        //reiniciarDirecciones();
         posicion[0] = 0;
         posicion[1] = 0;
         listaMovimientos = new ArrayList<>();
         this.bando = bando;
         this.tipoPieza = tipoPieza;
+        clavada = new Clavada(posicion[0], posicion[1]);
     }
 
     public Pieza(int bando, TipoPieza tipoPieza, int i, int j)
     {
-        posicion[0] = 0;
-        posicion[1] = 0;
+        //reiniciarDirecciones();
+        posicion[0] = i;
+        posicion[1] = j;
         listaMovimientos = new ArrayList<>();
         this.bando = bando;
         this.tipoPieza = tipoPieza;
+        clavada = new Clavada(posicion[0], posicion[1]);
     }
 
     public int getBando()
@@ -76,17 +82,17 @@ public abstract class Pieza
         }
     }
 
-    public abstract void calcularMovmientosB(Tablero casillas);
-    public abstract void calcularMovmientosN(Tablero casillas);
+    public abstract void calcularMovimientosB(Tablero casillas);
+    public abstract void calcularMovimientosN(Tablero casillas);
     public void actualizarMovimientos(Tablero casillas)
     {
         if(listaMovimientos.isEmpty() && bando == 0)
         {
-            calcularMovmientosB(casillas);
+            calcularMovimientosB(casillas);
         }
         else if(listaMovimientos.isEmpty() && bando == 1)
         {
-            calcularMovmientosN(casillas);
+            calcularMovimientosN(casillas);
         }
     }
 
@@ -125,4 +131,11 @@ public abstract class Pieza
         }
         return false;
     }
+
+    public Clavada getClavada()
+    {
+        return clavada;
+    }
+
+    protected abstract void reiniciarDirecciones();
 }

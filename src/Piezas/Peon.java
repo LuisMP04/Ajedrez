@@ -17,9 +17,8 @@ public class Peon extends Pieza
         this.tipoPieza = tipoPieza;
     }
 
-    public void calcularMovmientosB(Tablero casillas)
+    public void calcularMovimientosB(Tablero casillas)
     {
-        System.out.println("La pieza es blanca");
         int i = posicion[0];
         int j = posicion[1];
         //System.out.println("Movimientos de la pieza en " + posicion[0] + "|" + posicion[1]);
@@ -38,9 +37,8 @@ public class Peon extends Pieza
         }
     }
 
-    public void calcularMovmientosN(Tablero casillas)
+    public void calcularMovimientosN(Tablero casillas)
     {
-        System.out.println("La pieza es negra");
         int i = posicion[0];
         int j = posicion[1];
         //System.out.println("Movimientos de la pieza en " + posicion[0] + "|" + posicion[1]);
@@ -62,6 +60,11 @@ public class Peon extends Pieza
     public void coronar()
     {
         //codigo para coronar peon
+    }
+
+    protected void reiniciarDirecciones()
+    {
+        
     }
 
     @Override

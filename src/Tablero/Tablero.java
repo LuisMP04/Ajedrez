@@ -6,14 +6,11 @@ public class Tablero
 {
     private Pieza[][] casillas = new Pieza[8][8];
 
-    // Matriz que indica si hay piezas casillas activadas (0) o casillas desactivadas (1)
-    private int[][] casillasLogicas = new int[8][8];
-
     public Tablero()
     {
         //inicializar el tablero'
         //peones
-        for(int j = 0; j < 8; j++)
+        /*for(int j = 0; j < 8; j++)
         {
             casillas[1][j] = new Peon(1, TipoPieza.PEON, 1, j);
             casillas[6][j] = new Peon(0, TipoPieza.PEON, 6, j);
@@ -43,17 +40,12 @@ public class Tablero
 
         //reyes
         casillas[0][4] = new Rey(1, TipoPieza.REY, 0, 4);
-        casillas[7][4] = new Rey(1, TipoPieza.REY, 7, 4);
+        casillas[7][4] = new Rey(1, TipoPieza.REY, 7, 4);*/
     }
     
     public Pieza[][] getCasillas()
     {
         return casillas;
-    }
-
-    public int[][] getCasillasLogicas()
-    {
-        return casillasLogicas;
     }
 
     public Pieza getPieza(int i, char j)
