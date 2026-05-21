@@ -12,10 +12,7 @@ public class Caballo extends Pieza
 
     public Caballo(int bando, TipoPieza tipoPieza, int i, int j)
     {
-        this.bando = bando;
-        posicion[0] = i;
-        posicion[1] = j;
-        this.tipoPieza = tipoPieza;
+        super(bando, tipoPieza, i, j);
     }
 
     @Override

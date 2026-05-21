@@ -80,7 +80,7 @@ public class Dama extends Pieza
             }
         }
 
-        System.out.println("Direcciones validas:");
+        //System.out.println("Direcciones validas:");
         DireccionRayo dr;
         for(int xd = 0; xd < 8; xd++)
         {

@@ -7,5 +7,6 @@ public interface Comando
     //execute()
     public void actualizarMovimientos();
     public void reiniciarMovimientos();
+    public void reiniciarClavadas();
     public void verificarJaques();
 }

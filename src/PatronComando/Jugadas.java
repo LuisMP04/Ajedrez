@@ -13,6 +13,15 @@ public class Jugadas implements Comando
         this.casillas = casillas;
     }
 
+    public void ejecutar()
+    {
+        casillas.mostrarTablero();
+        reiniciarMovimientos();
+        verificarJaques();
+        actualizarMovimientos();
+        reiniciarClavadas();
+    }
+
     //Comandos
     public void actualizarMovimientos()
     {
@@ -44,6 +53,23 @@ public class Jugadas implements Comando
                 if(piezas[i][j] != null)
                 {
                     piezas[i][j].reiniciarMovimientos();
+                }
+            }
+        }
+    }
+
+    public void reiniciarClavadas()
+    {
+        Pieza[][] piezas = casillas.getCasillas();
+
+        int j;
+        for(int i = 0; i < 8; i++)
+        {
+            for(j = 0; j < 8; j++)
+            {
+                if(piezas[i][j] != null)
+                {
+                    piezas[i][j].getClavada().reiniciar();
                 }
             }
         }

@@ -13,4 +13,10 @@ public class Clavada
         this.i = i;
         this.j = j;
     }
+
+    public void reiniciar()
+    {
+        estado = false;
+        rayo = DireccionRayo.NINGUNO;
+    }
 }

@@ -52,7 +52,7 @@ public class Alfil extends Pieza
             }
         }
         
-        System.out.println("Direcciones validas:");
+        //System.out.println("Direcciones validas:");
     
         for(DireccionRayo dr : direcciones)
         {

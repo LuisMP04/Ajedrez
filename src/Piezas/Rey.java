@@ -18,10 +18,7 @@ public class Rey extends Pieza implements Jaqueable
 
     public Rey(int bando, TipoPieza tipoPieza, int i, int j)
     {
-        this.bando = bando;
-        posicion[0] = i;
-        posicion[1] = j;
-        this.tipoPieza = tipoPieza;
+        super(bando, tipoPieza, i, j);
     }
 
     @Override
@@ -731,6 +728,8 @@ public class Rey extends Pieza implements Jaqueable
         {
             listaMovimientos.add(new Movimiento((i), (j-1)));
         }
+
+        invalidarCasillasAtacadas(casillas);
     }
 
     public void calcularMovimientosN(Tablero casillas){}

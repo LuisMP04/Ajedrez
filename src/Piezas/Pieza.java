@@ -13,11 +13,6 @@ public abstract class Pieza
     protected TipoPieza tipoPieza;
     protected Clavada clavada;
 
-    public Pieza()
-    {
-        listaMovimientos = new ArrayList<>();
-    }
-
     public Pieza(int bando, TipoPieza tipoPieza)
     {
         //reiniciarDirecciones();
@@ -99,6 +94,7 @@ public abstract class Pieza
     public void reiniciarMovimientos()
     {
         listaMovimientos.clear();
+        reiniciarDirecciones();
     }
 
     public void mostrarMovimientos()
