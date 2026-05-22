@@ -1,6 +1,7 @@
 package Piezas;
 
 import Reglas.Clavada;
+import Reglas.DireccionRayo;
 import Reglas.Jaqueable;
 import Tablero.*;
 import java.util.ArrayList;
@@ -13,25 +14,25 @@ public abstract class Pieza
     protected TipoPieza tipoPieza;
     protected Clavada clavada;
 
-    public Pieza(int bando, TipoPieza tipoPieza)
+    public Pieza(int bando)
     {
         //reiniciarDirecciones();
         posicion[0] = 0;
         posicion[1] = 0;
         listaMovimientos = new ArrayList<>();
         this.bando = bando;
-        this.tipoPieza = tipoPieza;
+        this.tipoPieza = null;
         clavada = new Clavada(posicion[0], posicion[1]);
     }
 
-    public Pieza(int bando, TipoPieza tipoPieza, int i, int j)
+    public Pieza(int bando, int i, int j)
     {
         //reiniciarDirecciones();
         posicion[0] = i;
         posicion[1] = j;
         listaMovimientos = new ArrayList<>();
         this.bando = bando;
-        this.tipoPieza = tipoPieza;
+        this.tipoPieza = null;
         clavada = new Clavada(posicion[0], posicion[1]);
     }
 
@@ -131,6 +132,16 @@ public abstract class Pieza
     public Clavada getClavada()
     {
         return clavada;
+    }
+
+    public void darJaque(Pieza rey, DireccionRayo rayo)
+    {
+        //Primero comprobar si la pieza es un rey, solamente para asegurar
+        if(rey.getTipoPieza() == TipoPieza.REY && rey.getBando() != this.bando)
+        {
+            rey.getClavada().estado = true;
+            rey.getClavada().rayo = rayo;    
+        }
     }
 
     protected abstract void reiniciarDirecciones();

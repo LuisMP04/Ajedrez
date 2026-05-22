@@ -8,15 +8,17 @@ public class Torre extends Pieza
 {
     private DireccionRayo[] direcciones = new DireccionRayo[4];
 
-    public Torre(int bando, TipoPieza tipoPieza)
+    public Torre(int bando)
     {
-        super(bando, tipoPieza);
+        super(bando);
+        tipoPieza = TipoPieza.TORRE;
         reiniciarDirecciones();
     }
 
-    public Torre(int bando, TipoPieza tipoPieza, int i, int j)
+    public Torre(int bando, int i, int j)
     {
-        super(bando, tipoPieza, i, j);
+        super(bando, i, j);
+        tipoPieza = TipoPieza.TORRE;
         reiniciarDirecciones();
     }
 
@@ -85,21 +87,26 @@ public class Torre extends Pieza
 
                 if(casillas.getCasillas()[movi][j] != null)
                 {
-                    if(casillas.getCasillas()[movi][j].bando == this.bando || casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][j].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[movi][j] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, j));
-                }
-                else if(casillas.getCasillas()[movi][j] != null && casillas.getCasillas()[movi][j].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(movi, j));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, j));
+                }
+
                 movi -= 1;
             }
         }
@@ -119,21 +126,27 @@ public class Torre extends Pieza
 
                 if(casillas.getCasillas()[i][movj] != null)
                 {
-                    if(casillas.getCasillas()[i][movj].bando == this.bando || casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[i][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[i][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(i, movj));
-                }
-                else if(casillas.getCasillas()[i][movj] != null && casillas.getCasillas()[i][movj].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.DERECHA);
+                        break;
+                    }
+
+
                     listaMovimientos.add(new Movimiento(i, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(i, movj));
+                }
+
                 movj += 1;
             }
         }
@@ -153,21 +166,26 @@ public class Torre extends Pieza
                 
                 if(casillas.getCasillas()[i][movj] != null)
                 {
-                    if(casillas.getCasillas()[i][movj].bando == this.bando || casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[i][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[i][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(i, movj));
-                }
-                else if(casillas.getCasillas()[i][movj] != null && casillas.getCasillas()[i][movj].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.IZQUIERDA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(i, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(i, movj));
+                }
+
                 movj -= 1;
             }
         }
@@ -187,21 +205,26 @@ public class Torre extends Pieza
 
                 if(casillas.getCasillas()[movi][j] != null)
                 {
-                    if(casillas.getCasillas()[movi][j].bando == this.bando || casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][j].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[movi][j] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, j));
-                }
-                else if(casillas.getCasillas()[movi][j] != null && casillas.getCasillas()[movi][j].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(movi, j));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, j));
+                }
+
                 movi += 1;
             }
         }

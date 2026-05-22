@@ -8,15 +8,17 @@ public class Alfil extends Pieza
 {
     private DireccionRayo[] direcciones = new DireccionRayo[4];
 
-    public Alfil(int bando, TipoPieza tipoPieza)
+    public Alfil(int bando)
     {
-        super(bando, tipoPieza);
+        super(bando);
+        tipoPieza = TipoPieza.ALFIL;
         reiniciarDirecciones();
     }
 
-    public Alfil(int bando, TipoPieza tipoPieza, int i, int j)
+    public Alfil(int bando, int i, int j)
     {
-        super(bando, tipoPieza, i, j);
+        super(bando, i, j);
+        tipoPieza = TipoPieza.ALFIL;
         // Inicialmente todas las direcciones estan habilitadas
         reiniciarDirecciones();
     }
@@ -86,21 +88,26 @@ public class Alfil extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_DERECHA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
+                }
+    
                 movi -= 1;
                 movj += 1;
             }
@@ -122,21 +129,26 @@ public class Alfil extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_DERECHA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
+                }
+
                 movi += 1;
                 movj += 1;
             }
@@ -158,20 +170,24 @@ public class Alfil extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_IZQUIERDA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
+                }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
                 }
                 movi += 1;
                 movj -= 1;
@@ -194,21 +210,26 @@ public class Alfil extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_IZQUIERDA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
+                }
+
                 movi -= 1;
                 movj -= 1;
             }

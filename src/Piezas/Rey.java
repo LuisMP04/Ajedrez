@@ -11,14 +11,18 @@ public class Rey extends Pieza implements Jaqueable
     //private ArrayList<Movimiento> casillasBloqueadas = new ArrayList<>();
     private int jaque = 0;  //0 = no jaque, 1 = jaque
 
-    public Rey(int bando, TipoPieza tipoPieza)
+    public Rey(int bando)
     {   
-        super(bando, tipoPieza);
+        super(bando);
+        tipoPieza = TipoPieza.REY;
+        reiniciarDirecciones();
     }
 
-    public Rey(int bando, TipoPieza tipoPieza, int i, int j)
+    public Rey(int bando, int i, int j)
     {
-        super(bando, tipoPieza, i, j);
+        super(bando, i, j);
+        tipoPieza = TipoPieza.REY;
+        reiniciarDirecciones();
     }
 
     @Override
@@ -90,7 +94,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi+1][movj].getBando() != this.bando &&
             pieza[movi+1][movj].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO");
             return true;
         }
 
@@ -100,7 +104,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi][movj+1].getBando() != this.bando &&
             pieza[movi][movj+1].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO A LA DERECHA");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO A LA DERECHA");
             return true;
         }
 
@@ -110,7 +114,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi][movj-1].getBando() != this.bando &&
             pieza[movi][movj-1].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO A LA IZQUIERDA");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO A LA IZQUIERDA");
             return true;
         }
 
@@ -120,7 +124,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi-1][movj+1].getBando() != this.bando &&
             pieza[movi-1][movj+1].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA A LA DERECHA");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA A LA DERECHA");
             return true;
         }
 
@@ -130,7 +134,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi+1][movj+1].getBando() != this.bando &&
             pieza[movi+1][movj+1].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO A LA DERECHA");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO A LA DERECHA");
             return true;
         }
         
@@ -140,7 +144,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi-1][movj-1].getBando() != this.bando &&
             pieza[movi-1][movj-1].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA A LA IZQUIERDA");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ARRIBA A LA IZQUIERDA");
             return true;
         }
 
@@ -150,7 +154,7 @@ public class Rey extends Pieza implements Jaqueable
             pieza[movi+1][movj-1].getBando() != this.bando &&
             pieza[movi+1][movj-1].getTipoPieza() == TipoPieza.REY)
         {
-            System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO A LA IZQUIERDA");
+            //System.out.println("DEBUG: REY ENEMIGO ENCONTRADO ABAJO A LA IZQUIERDA");
             return true;
         }
 
@@ -163,7 +167,7 @@ public class Rey extends Pieza implements Jaqueable
                 pieza[movi-1][movj+1].getBando() != this.bando &&
                 pieza[movi-1][movj+1].getTipoPieza() == TipoPieza.PEON)
             {
-                System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA DERECHA");
+                //System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA DERECHA");
                 return true;
             }
             //Arriba e izquierda
@@ -172,7 +176,7 @@ public class Rey extends Pieza implements Jaqueable
                 pieza[movi-1][movj-1].getBando() != this.bando &&
                 pieza[movi-1][movj-1].getTipoPieza() == TipoPieza.PEON)
             {
-                System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA IZQUIERDA");
+                //System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA IZQUIERDA");
                 return true;
             }
         }
@@ -184,7 +188,7 @@ public class Rey extends Pieza implements Jaqueable
                 pieza[movi+1][movj+1].getBando() != this.bando &&
                 pieza[movi+1][movj+1].getTipoPieza() == TipoPieza.PEON)
             {
-                System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA DERECHA");
+                //System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA DERECHA");
                 return true;
             }
             //Abajo e izquierda
@@ -193,7 +197,7 @@ public class Rey extends Pieza implements Jaqueable
                 pieza[movi+1][movj-1].getBando() != this.bando &&
                 pieza[movi+1][movj-1].getTipoPieza() == TipoPieza.PEON)
             {
-                System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA IZQUIERDA");
+                //System.out.println("DEBUG: PEON NEGRO ENCONTRADO ARRIBA A LA IZQUIERDA");
                 return true;
             }
         }
@@ -317,7 +321,7 @@ public class Rey extends Pieza implements Jaqueable
         while(it.hasNext())
         {
             m = it.next();
-            System.out.println("DEBUG: Comprobando en: [" + (8 - m.i) + "|" + (char)(m.j + 65) + "]");
+            //System.out.println("DEBUG: Comprobando en: [" + (8 - m.i) + "|" + (char)(m.j + 65) + "]");
             //si ese movimiento está atacado
             if(casillasAtacadas(casillas, m.i, m.j) == true)
             {
@@ -350,8 +354,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi-incI][movj].getTipoPieza() == TipoPieza.TORRE ||
                     pieza[movi-incI][movj].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ARRIBA");
+                    //System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ARRIBA");
                     return true;
+                }
+
+                if(pieza[movi-incI][movj] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza bloquea el rayo
@@ -385,8 +395,14 @@ public class Rey extends Pieza implements Jaqueable
                     pieza[movi+incI][movj].getTipoPieza() == TipoPieza.DAMA))
                 {
             
-                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ABAJO");
+                    //System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA ABAJO");
                     return true;
+                }
+
+                if(pieza[movi+incI][movj] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza bloquea el rayo
@@ -418,8 +434,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.TORRE ||
                     pieza[movi][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA DERECHA");
+                    //System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA DERECHA");
                     return true;
+                }
+
+                if(pieza[movi][movj+incJ] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza para el rayo
@@ -452,8 +474,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.TORRE ||
                     pieza[movi][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA IZQUIERDA");
+                    //System.out.println("DEBUG: DAMA O TORRE ENCONTRADA HACIA LA IZQUIERDA");
                     return true;
+                }
+
+                if(pieza[movi][movj-incJ] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza para el rayo
@@ -485,8 +513,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
                     pieza[movi-incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-DERECHA");
+                    //System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-DERECHA");
                     return true;
+                }
+
+                if(pieza[movi-incI][movj+incJ] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza para el rayo
@@ -519,8 +553,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.ALFIL ||
                     pieza[movi+incI][movj+incJ].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-DERECHA");
+                    //System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-DERECHA");
                     return true;
+                }
+
+                if(pieza[movi+incI][movj+incJ] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza para el rayo
@@ -553,8 +593,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
                     pieza[movi-incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-IZQUIERDA");
+                    //System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ARRIBA-IZQUIERDA");
                     return true;
+                }
+
+                if(pieza[movi-incI][movj-incJ] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza para el rayo
@@ -585,8 +631,14 @@ public class Rey extends Pieza implements Jaqueable
                     (pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.ALFIL ||
                     pieza[movi+incI][movj-incJ].getTipoPieza() == TipoPieza.DAMA))
                 {
-                    System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-IZQUIERDA");
+                    //System.out.println("DEBUG: DAMA O ALFIL ENCONTRADA HACIA ABAJO-IZQUIERDA");
                     return true;
+                }
+
+                if(pieza[movi+incI][movj-incJ] == this)
+                {
+                    // No es una amenaza, es la misma pieza, por lo que sigue buscando mas profundo
+                    continue;
                 }
 
                 //cualquier otra pieza para el rayo
@@ -615,7 +667,7 @@ public class Rey extends Pieza implements Jaqueable
     {
         int i = posicion[0];
         int j = posicion[1];
-        
+
         //Abajo a la derecha (+i +j) y abajo
         if((i+1 <= 7 && j+1 <= 7) && 
             casillas.getCasillas()[i+1][j+1] == null)
@@ -734,10 +786,7 @@ public class Rey extends Pieza implements Jaqueable
 
     public void calcularMovimientosN(Tablero casillas){}
 
-    protected void reiniciarDirecciones()
-    {
-
-    }
+    protected void reiniciarDirecciones(){}
 
     @Override
     public String toString()

@@ -1,18 +1,21 @@
 package Piezas;
 
+import Reglas.DireccionRayo;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 
 public class Caballo extends Pieza
 {
-    public Caballo(int bando, TipoPieza tipoPieza)
+    public Caballo(int bando)
     {
-        super(bando, tipoPieza);
+        super(bando);
+        tipoPieza = TipoPieza.CABALLO;
     }
 
-    public Caballo(int bando, TipoPieza tipoPieza, int i, int j)
+    public Caballo(int bando, int i, int j)
     {
-        super(bando, tipoPieza, i, j);
+        super(bando, i, j);
+        tipoPieza = TipoPieza.CABALLO;
     }
 
     @Override
@@ -32,7 +35,6 @@ public class Caballo extends Pieza
         int j = posicion[1];
         int movi = i, movj = j;
 
-        //j = 2;
         for(movi = 1; movi <= 2; movi++)
         {
             for(movj = 2; movj >= 1; movj--)
@@ -43,51 +45,91 @@ public class Caballo extends Pieza
                 }
 
                 //Abajo y derecha (+i +j)
-                if((i+movi <= 7 && j+movj <= 7) &&
-                    casillas.getCasillas()[i+movi][j+movj] == null)
+                if(i+movi <= 7 && j+movj <= 7)
                 {
-                    listaMovimientos.add(new Movimiento(i+movi, j+movj));
-                }
-                else if((i+movi <= 7 && j+movj <= 7) &&
-                        casillas.getCasillas()[i+movi][j+movj] != null && casillas.getCasillas()[i+movi][j+movj].bando != this.bando)
-                {
-                    listaMovimientos.add(new Movimiento(i+movi, j+movj));
+                    if(casillas.getCasillas()[i+movi][j+movj] == null)
+                    {
+                        listaMovimientos.add(new Movimiento(i+movi, j+movj));
+                    }
+                    else if(casillas.getCasillas()[i+movi][j+movj].bando != this.bando)
+                    {
+                        if(casillas.getCasillas()[i+movi][j+movj].getTipoPieza() == TipoPieza.REY)
+                        {
+                            //Encuentra al rey enemigo, activar jaque
+                            darJaque(casillas.getCasillas()[i+movi][j+movj], DireccionRayo.NINGUNO);
+                        }
+                        else
+                        {  
+                            //No fue el rey, agregar el movimiento
+                            listaMovimientos.add(new Movimiento(i+movi, j+movj));
+                        }
+                    }
                 }
 
                 //Abajo e izquierda (+i -j)
-                if((i+movi <= 7 && j-movj >= 0) &&
-                    casillas.getCasillas()[i+movi][j-movj] == null)
+                if(i+movi <= 7 && j-movj >= 0)
                 {
-                    listaMovimientos.add(new Movimiento(i+movi, j-movj));
-                }
-                else if((i+movi <= 7 && j-movj >= 0) &&
-                        casillas.getCasillas()[i+movi][j-movj] != null && casillas.getCasillas()[i+movi][j-movj].bando != this.bando)
-                {
-                    listaMovimientos.add(new Movimiento(i+movi, j-movj));
+                    if(casillas.getCasillas()[i+movi][j-movj] == null)
+                    {
+                        listaMovimientos.add(new Movimiento(i+movi, j-movj));
+                    }
+                    else if(casillas.getCasillas()[i+movi][j-movj].bando != this.bando)
+                    {
+                        if(casillas.getCasillas()[i+movi][j-movj].getTipoPieza() == TipoPieza.REY)
+                        {
+                            //Encuentra al rey enemigo, activar jaque
+                            darJaque(casillas.getCasillas()[i+movi][j-movj], DireccionRayo.NINGUNO);
+                        }
+                        else
+                        {
+                            //No fue el rey, agregar el movimiento
+                            listaMovimientos.add(new Movimiento(i+movi, j-movj));
+                        }
+                    }
                 }
 
                 //Arriba e izquierda (-i -j)
-                if((i-movi >= 0 && j-movj >= 0) &&
-                    casillas.getCasillas()[i-movi][j-movj] == null)
+                if(i-movi >= 0 && j-movj >= 0)
                 {
-                    listaMovimientos.add(new Movimiento(i-movi, j-movj));
-                }
-                else if((i-movi >= 0 && j-movj >= 0) &&
-                        casillas.getCasillas()[i-movi][j-movj] != null && casillas.getCasillas()[i-movi][j-movj].bando != this.bando)
-                {
-                    listaMovimientos.add(new Movimiento(i-movi, j-movj));
+                    if(casillas.getCasillas()[i-movi][j-movj] == null)
+                    {
+                        listaMovimientos.add(new Movimiento(i-movi, j-movj));
+                    }
+                    else if(casillas.getCasillas()[i-movi][j-movj].bando != this.bando)
+                    {
+                        if(casillas.getCasillas()[i-movi][j-movj].getTipoPieza() == TipoPieza.REY)
+                        {
+                            //Encuentra al rey enemigo, activar jaque
+                            darJaque(casillas.getCasillas()[i-movi][j-movj], DireccionRayo.NINGUNO);
+                        }
+                        else
+                        {
+                            //No fue el rey, agregar el movimiento
+                            listaMovimientos.add(new Movimiento(i-movi, j-movj));
+                        }
+                    }
                 }
 
                 //Arriba y derecha (-i +j)
-                if((i-movi >= 0 && j+movj <= 7) &&
-                    casillas.getCasillas()[i-movi][j+movj] == null)
+                if(i-movi >= 0 && j+movj <= 7)
                 {
-                    listaMovimientos.add(new Movimiento(i-movi, j+movj));
-                }
-                else if((i-movi >= 0 && j+movj <= 7) &&
-                        casillas.getCasillas()[i-movi][j+movj] != null && casillas.getCasillas()[i-movi][j+movj].bando != this.bando)
-                {
-                    listaMovimientos.add(new Movimiento(i-movi, j+movj));
+                    if(casillas.getCasillas()[i-movi][j+movj] == null)
+                    {
+                        listaMovimientos.add(new Movimiento(i-movi, j+movj));
+                    }
+                    else if(casillas.getCasillas()[i-movi][j+movj].bando != this.bando)
+                    {
+                        if(casillas.getCasillas()[i-movi][j+movj].getTipoPieza() == TipoPieza.REY)
+                        {
+                            //Encuentra al rey enemigo, activar jaque
+                            darJaque(casillas.getCasillas()[i-movi][j+movj], DireccionRayo.NINGUNO);
+                        }
+                        else
+                        {
+                            //No fue el rey, agregar el movimiento
+                            listaMovimientos.add(new Movimiento(i-movi, j+movj));
+                        }
+                    }
                 }
             }
         }

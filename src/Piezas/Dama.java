@@ -8,15 +8,17 @@ public class Dama extends Pieza
 {
     private DireccionRayo[] direcciones = new DireccionRayo[8];
 
-    public Dama(int bando, TipoPieza tipoPieza)
+    public Dama(int bando)
     {
-        super(bando, tipoPieza);
+        super(bando);
+        tipoPieza = TipoPieza.DAMA;
         reiniciarDirecciones();
     }
 
-    public Dama(int bando, TipoPieza tipoPieza, int i, int j)
+    public Dama(int bando, int i, int j)
     {
-        super(bando, tipoPieza, i, j);
+        super(bando, i, j);
+        tipoPieza = TipoPieza.DAMA;
         reiniciarDirecciones();
     }
 
@@ -114,21 +116,26 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[movi][j] != null)
                 {
-                    if(casillas.getCasillas()[movi][j].bando == this.bando || casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][j].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[movi][j] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, j));
-                }
-                else if(casillas.getCasillas()[movi][j] != null && casillas.getCasillas()[movi][j].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(movi, j));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, j));
+                }
+
                 movi -= 1;
             }
         }
@@ -148,21 +155,26 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[i][movj] != null)
                 {
-                    if(casillas.getCasillas()[i][movj].bando == this.bando || casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[i][movj].bando == this.bando)
                     {
                         break;
                     }
-                }   
 
-                if(casillas.getCasillas()[i][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(i, movj));
-                }
-                else if(casillas.getCasillas()[i][movj] != null && casillas.getCasillas()[i][movj].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.DERECHA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(i, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(i, movj));
+                }
+
                 movj += 1;
             }
         }
@@ -182,21 +194,26 @@ public class Dama extends Pieza
                 
                 if(casillas.getCasillas()[i][movj] != null)
                 {
-                    if(casillas.getCasillas()[i][movj].bando == this.bando || casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[i][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[i][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(i, movj));
-                }
-                else if(casillas.getCasillas()[i][movj] != null && casillas.getCasillas()[i][movj].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.IZQUIERDA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(i, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(i, movj));
+                }
+
                 movj -= 1;
             }
         }
@@ -216,24 +233,32 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[movi][j] != null)
                 {
-                    if(casillas.getCasillas()[movi][j].bando == this.bando || casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][j].bando == this.bando)
                     {
                         break;
                     }
-                }
 
-                if(casillas.getCasillas()[movi][j] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, j));
-                }
-                else if(casillas.getCasillas()[movi][j] != null && casillas.getCasillas()[movi][j].bando != this.bando)
-                {
+                    if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        break;
+                    }
+
                     listaMovimientos.add(new Movimiento(movi, j));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, j));
+                }
+
                 movi += 1;
             }
         }
+
+        movi = i;
+        movj = j;
 
         /*  
             Heuristica en diagonal:   
@@ -246,8 +271,8 @@ public class Dama extends Pieza
         //Arriba a la derecha
         if(direcciones[4] != null)
         {
-            movi = i-1;
-            movj = j+1;
+            movi -= 1;
+            movj += 1;
             //System.out.println("DEBUG: ARRIBA A LA DERECHA | i: " + movi + ", j: " + movj);
             while(movi > -1 && movj < 8)
             {
@@ -259,21 +284,26 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_DERECHA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
+                }
+    
                 movi -= 1;
                 movj += 1;
             }
@@ -295,21 +325,26 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_DERECHA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
+                }
+
                 movi += 1;
                 movj += 1;
             }
@@ -331,20 +366,24 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_IZQUIERDA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
+                }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
                 }
                 movi += 1;
                 movj -= 1;
@@ -367,28 +406,36 @@ public class Dama extends Pieza
 
                 if(casillas.getCasillas()[movi][movj] != null)
                 {
-                    if(casillas.getCasillas()[movi][movj].bando == this.bando || casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    if(casillas.getCasillas()[movi][movj].bando == this.bando)
                     {
                         break;
                     }
-                }
+                    
+                    if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
+                    {
+                        //Encuentra al rey enemigo, activar jaque
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_IZQUIERDA);
+                        break;
+                    }
 
-                if(casillas.getCasillas()[movi][movj] == null)
-                {
-                    listaMovimientos.add(new Movimiento(movi, movj));
-                }
-                else if(casillas.getCasillas()[movi][movj] != null && casillas.getCasillas()[movi][movj].bando != this.bando)
-                {
                     listaMovimientos.add(new Movimiento(movi, movj));
                     break;
                 }
+                else
+                {
+                    listaMovimientos.add(new Movimiento(movi, movj));
+                }
+
                 movi -= 1;
                 movj -= 1;
             }
         }
     }
 
-    public void calcularMovimientosN(Tablero casillas){}
+    public void calcularMovimientosN(Tablero casillas)
+    {
+        calcularMovimientosB(casillas);
+    }
 
     public void clavarPiezaEnemiga(Tablero casillas)
     {
