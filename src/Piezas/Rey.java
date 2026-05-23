@@ -10,6 +10,10 @@ public class Rey extends Pieza implements Jaqueable
     //private ArrayList<Movimiento> movPeligrosos = new ArrayList<>();
     //private ArrayList<Movimiento> casillasBloqueadas = new ArrayList<>();
     private int jaque = 0;  //0 = no jaque, 1 = jaque
+    private boolean ahogado = false;
+    private boolean mate = false;
+    private int cantidadAtacantes = 0;
+    private Pieza atacante = null;
 
     public Rey(int bando)
     {   
@@ -23,6 +27,31 @@ public class Rey extends Pieza implements Jaqueable
         super(bando, i, j);
         tipoPieza = TipoPieza.REY;
         reiniciarDirecciones();
+    }
+
+    public int getCantidadAtacantes()
+    {
+        return cantidadAtacantes;
+    }
+
+    public void setAtacante(Pieza atacante)
+    {
+        this.atacante = atacante;
+    }
+
+    public Pieza getPiezaAtacante()
+    {
+        return atacante;
+    }
+
+    public void aumentarAtacantes()
+    {
+        cantidadAtacantes += 1;
+    }
+
+    public void reiniciarCantidadAtacantes()
+    {
+        cantidadAtacantes = 0;
     }
 
     @Override
@@ -39,6 +68,21 @@ public class Rey extends Pieza implements Jaqueable
             System.out.println("El rey está en jaque");
             jaque = 1;
         }
+    }
+
+    public boolean getAhogado()
+    {
+        return ahogado;
+    }
+
+    public void activarAhogado()
+    {
+        ahogado = true;
+    }
+
+    public void desactivarAhogado()
+    {
+        ahogado = false;
     }
 
     @Override
@@ -782,9 +826,22 @@ public class Rey extends Pieza implements Jaqueable
         }
 
         invalidarCasillasAtacadas(casillas);
+
+        //Verificar si hay mate (falta el rey ahogado)
+        /*if(jaque == 1 && listaMovimientos.isEmpty())
+        {
+            mate = true;
+        }
+        else
+        {
+            mate = false;
+        }*/
     }
 
-    public void calcularMovimientosN(Tablero casillas){}
+    public void calcularMovimientosN(Tablero casillas)
+    {
+        calcularMovimientosB(casillas);
+    }
 
     protected void reiniciarDirecciones(){}
 

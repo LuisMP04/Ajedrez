@@ -96,7 +96,7 @@ public class Alfil extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_DERECHA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_DERECHA, this);
                         break;
                     }
 
@@ -137,7 +137,7 @@ public class Alfil extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_DERECHA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_DERECHA, this);
                         break;
                     }
 
@@ -178,7 +178,7 @@ public class Alfil extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_IZQUIERDA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_IZQUIERDA, this);
                         break;
                     }
 
@@ -218,7 +218,7 @@ public class Alfil extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_IZQUIERDA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_IZQUIERDA, this);
                         break;
                     }
 
@@ -413,7 +413,10 @@ public class Alfil extends Pieza
         }
     }
 
-    public void calcularMovimientosN(Tablero casillas){}
+    public void calcularMovimientosN(Tablero casillas)
+    {
+        calcularMovimientosB(casillas);
+    }
 
     @Override
     protected void reiniciarDirecciones()

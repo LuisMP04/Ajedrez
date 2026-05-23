@@ -2,7 +2,6 @@ package Piezas;
 
 import Reglas.Clavada;
 import Reglas.DireccionRayo;
-import Reglas.Jaqueable;
 import Tablero.*;
 import java.util.ArrayList;
 
@@ -46,6 +45,11 @@ public abstract class Pieza
         return posicion;
     }
 
+    public ArrayList<Movimiento> getListaMovimientos()
+    {
+        return listaMovimientos;
+    }
+
     public void mover(int posX, int posY, Tablero casillas)
     {
         boolean valido = false;
@@ -82,11 +86,11 @@ public abstract class Pieza
     public abstract void calcularMovimientosN(Tablero casillas);
     public void actualizarMovimientos(Tablero casillas)
     {
-        if(listaMovimientos.isEmpty() && bando == 0)
+        if(bando == 0)
         {
             calcularMovimientosB(casillas);
         }
-        else if(listaMovimientos.isEmpty() && bando == 1)
+        else
         {
             calcularMovimientosN(casillas);
         }
@@ -112,37 +116,25 @@ public abstract class Pieza
         return tipoPieza;
     }
 
-    public boolean verificarJaque(Tablero casillas)
-    {
-        for(Movimiento m : listaMovimientos)
-        {
-            if(casillas.getCasillas()[m.i][m.j] instanceof Jaqueable j &&
-                casillas.getCasillas()[m.i][m.j].getBando() != this.bando)
-            //if(casillas.getCasillas()[m.i][m.j].getTipoPieza() == TipoPieza.REY &&
-            //    casillas.getCasillas()[m.i][m.j].getBando() != this.bando)
-            {
-
-                j.activarJaque();
-                return true;
-            }
-        }
-        return false;
-    }
-
     public Clavada getClavada()
     {
         return clavada;
     }
 
-    public void darJaque(Pieza rey, DireccionRayo rayo)
+    public void darJaque(Pieza rey, DireccionRayo rayo, Pieza atacante)
     {
+        System.out.println("JAQUE DETECTADO");
         //Primero comprobar si la pieza es un rey, solamente para asegurar
         if(rey.getTipoPieza() == TipoPieza.REY && rey.getBando() != this.bando)
         {
-            rey.getClavada().estado = true;
-            rey.getClavada().rayo = rayo;    
+            Rey piezaRey = (Rey) rey;
+            piezaRey.getClavada().estado = true;
+            piezaRey.getClavada().rayo = rayo;
+            piezaRey.aumentarAtacantes();
+            piezaRey.setAtacante(atacante);
         }
     }
 
+    public void clavarPiezaEnemiga(Tablero casillas){}
     protected abstract void reiniciarDirecciones();
 }

@@ -124,7 +124,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA, this);
                         break;
                     }
 
@@ -163,7 +163,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.DERECHA);
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.DERECHA, this);
                         break;
                     }
 
@@ -202,7 +202,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.IZQUIERDA);
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.IZQUIERDA, this);
                         break;
                     }
 
@@ -241,7 +241,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA, this);
                         break;
                     }
 
@@ -292,7 +292,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_DERECHA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_DERECHA, this);
                         break;
                     }
 
@@ -333,7 +333,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_DERECHA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_DERECHA, this);
                         break;
                     }
 
@@ -374,7 +374,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_IZQUIERDA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ABAJO_IZQUIERDA, this);
                         break;
                     }
 
@@ -414,7 +414,7 @@ public class Dama extends Pieza
                     if(casillas.getCasillas()[movi][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_IZQUIERDA);
+                        darJaque(casillas.getCasillas()[movi][movj], DireccionRayo.ARRIBA_IZQUIERDA, this);
                         break;
                     }
 

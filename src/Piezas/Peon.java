@@ -77,7 +77,7 @@ public class Peon extends Pieza
                 {
                     if(casillas.getCasillas()[i-1][j-1].getTipoPieza() == TipoPieza.REY)
                     {
-                        darJaque(casillas.getCasillas()[i-1][j-1], DireccionRayo.NINGUNO);
+                        darJaque(casillas.getCasillas()[i-1][j-1], DireccionRayo.NINGUNO, this);
                     }
                     else
                     {    
@@ -96,7 +96,7 @@ public class Peon extends Pieza
                 {
                     if(casillas.getCasillas()[i-1][j+1].getTipoPieza() == TipoPieza.REY)
                     {
-                        darJaque(casillas.getCasillas()[i-1][j+1], DireccionRayo.NINGUNO);
+                        darJaque(casillas.getCasillas()[i-1][j+1], DireccionRayo.NINGUNO, this);
                     }
                     else
                     {    
@@ -163,7 +163,7 @@ public class Peon extends Pieza
                 {
                     if(casillas.getCasillas()[i+1][j-1].getTipoPieza() == TipoPieza.REY)
                     {
-                        darJaque(casillas.getCasillas()[i+1][j-1], DireccionRayo.NINGUNO);
+                        darJaque(casillas.getCasillas()[i+1][j-1], DireccionRayo.NINGUNO, this);
                     }
                     else
                     {
@@ -181,7 +181,7 @@ public class Peon extends Pieza
                 {
                     if(casillas.getCasillas()[i+1][j+1].getTipoPieza() == TipoPieza.REY)
                     {
-                        darJaque(casillas.getCasillas()[i+1][j+1], DireccionRayo.NINGUNO);
+                        darJaque(casillas.getCasillas()[i+1][j+1], DireccionRayo.NINGUNO, this);
                     }
                     else
                     {

@@ -26,6 +26,7 @@ public class Caballo extends Pieza
 
     public void calcularMovimientosB(Tablero casillas)
     {
+        System.out.println("CABALLO CLAVADO ESTADO: " + clavada.estado);
         // Si el caballo está clavado, no se puede mover
         if(clavada.estado == true)
         {
@@ -56,7 +57,7 @@ public class Caballo extends Pieza
                         if(casillas.getCasillas()[i+movi][j+movj].getTipoPieza() == TipoPieza.REY)
                         {
                             //Encuentra al rey enemigo, activar jaque
-                            darJaque(casillas.getCasillas()[i+movi][j+movj], DireccionRayo.NINGUNO);
+                            darJaque(casillas.getCasillas()[i+movi][j+movj], DireccionRayo.NINGUNO, this);
                         }
                         else
                         {  
@@ -78,7 +79,7 @@ public class Caballo extends Pieza
                         if(casillas.getCasillas()[i+movi][j-movj].getTipoPieza() == TipoPieza.REY)
                         {
                             //Encuentra al rey enemigo, activar jaque
-                            darJaque(casillas.getCasillas()[i+movi][j-movj], DireccionRayo.NINGUNO);
+                            darJaque(casillas.getCasillas()[i+movi][j-movj], DireccionRayo.NINGUNO, this);
                         }
                         else
                         {
@@ -100,7 +101,7 @@ public class Caballo extends Pieza
                         if(casillas.getCasillas()[i-movi][j-movj].getTipoPieza() == TipoPieza.REY)
                         {
                             //Encuentra al rey enemigo, activar jaque
-                            darJaque(casillas.getCasillas()[i-movi][j-movj], DireccionRayo.NINGUNO);
+                            darJaque(casillas.getCasillas()[i-movi][j-movj], DireccionRayo.NINGUNO, this);
                         }
                         else
                         {
@@ -122,7 +123,7 @@ public class Caballo extends Pieza
                         if(casillas.getCasillas()[i-movi][j+movj].getTipoPieza() == TipoPieza.REY)
                         {
                             //Encuentra al rey enemigo, activar jaque
-                            darJaque(casillas.getCasillas()[i-movi][j+movj], DireccionRayo.NINGUNO);
+                            darJaque(casillas.getCasillas()[i-movi][j+movj], DireccionRayo.NINGUNO, this);
                         }
                         else
                         {
@@ -135,12 +136,12 @@ public class Caballo extends Pieza
         }
     }
 
-    public void calcularMovimientosN(Tablero casillas){}
-
-    protected void reiniciarDirecciones()
+    public void calcularMovimientosN(Tablero casillas)
     {
-        
+        calcularMovimientosB(casillas);
     }
+
+    protected void reiniciarDirecciones(){}
 
     @Override
     public String toString()

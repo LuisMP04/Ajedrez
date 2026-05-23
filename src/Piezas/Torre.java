@@ -95,7 +95,7 @@ public class Torre extends Pieza
                     if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA, this);
                         break;
                     }
 
@@ -134,7 +134,7 @@ public class Torre extends Pieza
                     if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.DERECHA);
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.DERECHA, this);
                         break;
                     }
 
@@ -174,7 +174,7 @@ public class Torre extends Pieza
                     if(casillas.getCasillas()[i][movj].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.IZQUIERDA);
+                        darJaque(casillas.getCasillas()[i][movj], DireccionRayo.IZQUIERDA, this);
                         break;
                     }
 
@@ -213,7 +213,7 @@ public class Torre extends Pieza
                     if(casillas.getCasillas()[movi][j].getTipoPieza() == TipoPieza.REY)
                     {
                         //Encuentra al rey enemigo, activar jaque
-                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ARRIBA);
+                        darJaque(casillas.getCasillas()[movi][j], DireccionRayo.ABAJO, this);
                         break;
                     }
 
@@ -391,7 +391,10 @@ public class Torre extends Pieza
         }
     }
 
-    public void calcularMovimientosN(Tablero casillas){}
+    public void calcularMovimientosN(Tablero casillas)
+    {
+        calcularMovimientosB(casillas);
+    }
 
     protected void reiniciarDirecciones()
     {
