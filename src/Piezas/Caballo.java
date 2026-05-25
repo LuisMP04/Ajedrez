@@ -1,6 +1,7 @@
 package Piezas;
 
 import Reglas.DireccionRayo;
+import Reglas.TipoMovimiento;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 
@@ -26,7 +27,7 @@ public class Caballo extends Pieza
 
     public void calcularMovimientosB(Tablero casillas)
     {
-        System.out.println("CABALLO CLAVADO ESTADO: " + clavada.estado);
+        //System.out.println("CABALLO CLAVADO ESTADO: " + clavada.estado);
         // Si el caballo está clavado, no se puede mover
         if(clavada.estado == true)
         {
@@ -50,7 +51,7 @@ public class Caballo extends Pieza
                 {
                     if(casillas.getCasillas()[i+movi][j+movj] == null)
                     {
-                        listaMovimientos.add(new Movimiento(i+movi, j+movj));
+                        listaMovimientos.add(new Movimiento(i+movi, j+movj, TipoMovimiento.NORMAL));
                     }
                     else if(casillas.getCasillas()[i+movi][j+movj].bando != this.bando)
                     {
@@ -62,7 +63,7 @@ public class Caballo extends Pieza
                         else
                         {  
                             //No fue el rey, agregar el movimiento
-                            listaMovimientos.add(new Movimiento(i+movi, j+movj));
+                            listaMovimientos.add(new Movimiento(i+movi, j+movj, TipoMovimiento.CAPTURA));
                         }
                     }
                 }
@@ -72,7 +73,7 @@ public class Caballo extends Pieza
                 {
                     if(casillas.getCasillas()[i+movi][j-movj] == null)
                     {
-                        listaMovimientos.add(new Movimiento(i+movi, j-movj));
+                        listaMovimientos.add(new Movimiento(i+movi, j-movj, TipoMovimiento.NORMAL));
                     }
                     else if(casillas.getCasillas()[i+movi][j-movj].bando != this.bando)
                     {
@@ -84,7 +85,7 @@ public class Caballo extends Pieza
                         else
                         {
                             //No fue el rey, agregar el movimiento
-                            listaMovimientos.add(new Movimiento(i+movi, j-movj));
+                            listaMovimientos.add(new Movimiento(i+movi, j-movj, TipoMovimiento.CAPTURA));
                         }
                     }
                 }
@@ -94,7 +95,7 @@ public class Caballo extends Pieza
                 {
                     if(casillas.getCasillas()[i-movi][j-movj] == null)
                     {
-                        listaMovimientos.add(new Movimiento(i-movi, j-movj));
+                        listaMovimientos.add(new Movimiento(i-movi, j-movj, TipoMovimiento.NORMAL));
                     }
                     else if(casillas.getCasillas()[i-movi][j-movj].bando != this.bando)
                     {
@@ -106,7 +107,7 @@ public class Caballo extends Pieza
                         else
                         {
                             //No fue el rey, agregar el movimiento
-                            listaMovimientos.add(new Movimiento(i-movi, j-movj));
+                            listaMovimientos.add(new Movimiento(i-movi, j-movj, TipoMovimiento.CAPTURA));
                         }
                     }
                 }
@@ -116,7 +117,7 @@ public class Caballo extends Pieza
                 {
                     if(casillas.getCasillas()[i-movi][j+movj] == null)
                     {
-                        listaMovimientos.add(new Movimiento(i-movi, j+movj));
+                        listaMovimientos.add(new Movimiento(i-movi, j+movj, TipoMovimiento.NORMAL));
                     }
                     else if(casillas.getCasillas()[i-movi][j+movj].bando != this.bando)
                     {
@@ -128,7 +129,7 @@ public class Caballo extends Pieza
                         else
                         {
                             //No fue el rey, agregar el movimiento
-                            listaMovimientos.add(new Movimiento(i-movi, j+movj));
+                            listaMovimientos.add(new Movimiento(i-movi, j+movj, TipoMovimiento.CAPTURA));
                         }
                     }
                 }

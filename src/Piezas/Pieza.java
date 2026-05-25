@@ -64,10 +64,6 @@ public abstract class Pieza
 
         if(valido)
         {
-            //Creo que lo que va a funcionar es hacer que los movimientos sí se calculen en cuanto se mueve la pieza
-            //Para así poder poner en jaque al rey automaticamente
-            //Ademas, las demas reglas como peon al paso o el enroque también irán en la carpeta de reglas, y serán una interfaz
-
             int i = posicion[0];
             int j = posicion[1];
             posicion[0] = posX;
@@ -123,7 +119,7 @@ public abstract class Pieza
 
     public void darJaque(Pieza rey, DireccionRayo rayo, Pieza atacante)
     {
-        System.out.println("JAQUE DETECTADO");
+        //System.out.println("JAQUE DETECTADO");
         //Primero comprobar si la pieza es un rey, solamente para asegurar
         if(rey.getTipoPieza() == TipoPieza.REY && rey.getBando() != this.bando)
         {

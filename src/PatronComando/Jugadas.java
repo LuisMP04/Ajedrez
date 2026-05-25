@@ -2,6 +2,7 @@ package PatronComando;
 
 import Piezas.*;
 import Reglas.DireccionRayo;
+import Reglas.TipoMovimiento;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class Jugadas implements Comando
         actualizarMovimientos();
 
         verificarJaque();
+        verificarEnroque();
         verificarAhogado();
 
         casillas.mostrarTablero();
@@ -157,7 +159,7 @@ public class Jugadas implements Comando
 
         if(ahogado(1))
         {
-            System.out.println("Rey blanco ahogado");
+            System.out.println("Rey negro ahogado");
         }
     }
 
@@ -274,6 +276,134 @@ public class Jugadas implements Comando
         }
     }
 
+    public void verificarEnroque()
+    {
+        Pieza[][] piezas = casillas.getCasillas();
+        //Buscar a los dos reyes y a las torres
+        Rey reyBlanco = null, reyNegro = null;
+
+        int j;
+        for(int i = 0; i < 8; i++)
+        {
+            for(j = 0; j < 8; j++)
+            {
+                if(piezas[i][j] != null)
+                {    
+                    //Obtener al rey
+                    if(piezas[i][j].getBando() == 0)
+                    {
+                        if(piezas[i][j].getTipoPieza() == TipoPieza.REY)
+                        {
+                            reyBlanco = (Rey) piezas[i][j];
+                        }
+                    }
+                    else
+                    {
+                        if(piezas[i][j].getTipoPieza() == TipoPieza.REY)
+                        {
+                            reyNegro = (Rey) piezas[i][j];
+                        }
+                    }
+                }
+            }
+        }
+
+        Torre torreBlancaLargo = null;
+        Torre torreBlancaCorto = null;
+        Torre torreNegraLargo = null;
+        Torre torreNegraCorto = null;
+
+        if(casillas.getCasillas()[7][0] != null && casillas.getCasillas()[7][0].getTipoPieza() == TipoPieza.TORRE)
+        {
+            torreBlancaLargo = (Torre) piezas[7][0];
+        }
+
+        if(casillas.getCasillas()[7][7] != null && casillas.getCasillas()[7][7].getTipoPieza() == TipoPieza.TORRE)
+        {
+            torreBlancaCorto = (Torre) piezas[7][7];
+        }
+
+        if(casillas.getCasillas()[0][0] != null && casillas.getCasillas()[0][0].getTipoPieza() == TipoPieza.TORRE)
+        {
+            torreNegraLargo = (Torre) piezas[0][0];
+        }
+
+        if(casillas.getCasillas()[0][7] != null && casillas.getCasillas()[0][7].getTipoPieza() == TipoPieza.TORRE)
+        {
+            torreNegraCorto = (Torre) piezas[0][7];
+        }
+
+        if(torreBlancaLargo != null)
+        {
+            reyEnroqueLargo(reyBlanco, torreBlancaLargo);
+        }
+
+        if(torreBlancaCorto != null)
+        {
+            reyEnroqueCorto(reyBlanco, torreBlancaCorto);
+        }
+
+        if(torreNegraLargo != null)
+        {
+            reyEnroqueLargo(reyNegro, torreNegraLargo);
+        }
+
+        if(torreNegraCorto != null)
+        {
+            reyEnroqueCorto(reyNegro, torreNegraCorto);
+        }
+    }
+
+    private void reyEnroqueLargo(Rey rey, Torre torre)
+    {
+        int i = rey.getPosiciones()[0];
+        int j = rey.getPosiciones()[1];
+
+        if(rey.getPuedeEnrocar() == false || 
+            torre.getPuedeEnrocar() == false || 
+            rey.getJaque() == 1)
+        {
+            //System.out.println("DEBUG: El rey " + rey.getBando() + " no puede enrocar");
+            return;
+        }
+
+        //buscar en las tres casillas a la izquierda
+        if(casillas.getCasillas()[i][j-1] == null &&
+            casillas.getCasillas()[i][j-2] == null &&
+            casillas.getCasillas()[i][j-3] == null &&
+            !rey.verificarCasilla(casillas, i, j-1) &&
+            !rey.verificarCasilla(casillas, i, j-2) &&
+            !rey.verificarCasilla(casillas, i, j-3))
+        {
+            //Si en ninguna de las casillas estaria atacado
+            rey.setMovimientoEnroque(i, j-3, TipoMovimiento.ENROQUE);
+        }
+    }
+
+    private void reyEnroqueCorto(Rey rey, Torre torre)
+    {
+        int i = rey.getPosiciones()[0];
+        int j = rey.getPosiciones()[1];
+
+        if(rey.getPuedeEnrocar() == false || 
+            torre.getPuedeEnrocar() == false || 
+            rey.getJaque() == 1)
+        {
+            //System.out.println("DEBUG: El rey " + rey.getBando() + " no puede enrocar");
+            return;
+        }
+
+        //buscar en las tres casillas a la izquierda
+        if(casillas.getCasillas()[i][j+1] == null &&
+            casillas.getCasillas()[i][j+2] == null &&
+            !rey.verificarCasilla(casillas, i, j+1) &&
+            !rey.verificarCasilla(casillas, i, j+2))
+        {
+            //Si en ninguna de las casillas estaria atacado
+            rey.setMovimientoEnroque(i, j+2, TipoMovimiento.ENROQUE);
+        }
+    }
+
     private void filtradoDeMovimientos(Rey rey, Pieza atacante, ArrayList<Pieza> piezas)
     {
         if(rey.getJaque() != 1)
@@ -347,7 +477,8 @@ public class Jugadas implements Comando
             movimientosValidos.add(
                 new Movimiento(
                     atacante.getPosiciones()[0],
-                    atacante.getPosiciones()[1]
+                    atacante.getPosiciones()[1],
+                    TipoMovimiento.NORMAL
                 )
             );
         }
@@ -410,7 +541,7 @@ public class Jugadas implements Comando
                 break;
             }
 
-            movimientos.add(new Movimiento(inicioI, inicioJ));
+            movimientos.add(new Movimiento(inicioI, inicioJ, TipoMovimiento.NORMAL));
         }
 
         return movimientos;

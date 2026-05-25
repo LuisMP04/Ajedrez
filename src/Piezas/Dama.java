@@ -1,6 +1,7 @@
 package Piezas;
 
 import Reglas.DireccionRayo;
+import Reglas.TipoMovimiento;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 
@@ -128,12 +129,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.NORMAL));
                 }
 
                 movi -= 1;
@@ -167,12 +168,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.NORMAL));
                 }
 
                 movj += 1;
@@ -206,12 +207,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.NORMAL));
                 }
 
                 movj -= 1;
@@ -245,12 +246,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.NORMAL));
                 }
 
                 movi += 1;
@@ -296,12 +297,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
     
                 movi -= 1;
@@ -337,12 +338,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
 
                 movi += 1;
@@ -378,12 +379,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
                 movi += 1;
                 movj -= 1;
@@ -418,12 +419,12 @@ public class Dama extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
 
                 movi -= 1;

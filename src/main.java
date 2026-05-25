@@ -50,6 +50,16 @@ public class main
         tablero.getCasillas()[5][6] = new Dama(1, 5, 6);
         Rey reyPruebas = (Rey) tablero.getCasillas()[7][7];*/
 
+        // Prueba 7 - Pasada
+        /*//reyes
+        tablero.getCasillas()[0][4] = new Rey(1, 0, 4);
+        tablero.getCasillas()[7][4] = new Rey(0, 7, 4);
+        //torres
+        tablero.getCasillas()[0][0] = new Torre(1, 0, 0);
+        tablero.getCasillas()[0][7] = new Torre(1, 0, 7);
+        tablero.getCasillas()[7][0] = new Torre(0, 7, 0);
+        tablero.getCasillas()[7][7] = new Torre(0, 7, 7);*/
+
 
         System.out.println("\n --- Simulación de juego --- \n");
         int i, j;

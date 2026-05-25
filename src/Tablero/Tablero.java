@@ -54,6 +54,16 @@ public class Tablero
         return casillas[8-i][columna];
     }
 
+    public Pieza getPieza(int i, int j)
+    {
+        if(casillas[i][j] != null)
+        {
+            return casillas[i][j];
+        }
+
+        return null;
+    }
+
     public void mostrarTablero()
     {
         System.out.print("|x|");

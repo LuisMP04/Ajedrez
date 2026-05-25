@@ -1,6 +1,7 @@
 package Piezas;
 
 import Reglas.DireccionRayo;
+import Reglas.TipoMovimiento;
 import Tablero.*;
 
 public class Peon extends Pieza
@@ -55,17 +56,18 @@ public class Peon extends Pieza
         {
             if(i > 0 && casillas.getCasillas()[i-1][j] == null)
             {
-                listaMovimientos.add(new Movimiento(i-1, j));
-            }
+                listaMovimientos.add(new Movimiento(i-1, j, TipoMovimiento.NORMAL));
 
-            if(primerTurno == true)
-            {
-                if(casillas.getCasillas()[i-2][j] == null)
+                if(primerTurno == true)
                 {
-                    listaMovimientos.add(new Movimiento(i-2, j));
-                    //primerTurno = false;
+                    if(casillas.getCasillas()[i-2][j] == null)
+                    {
+                        listaMovimientos.add(new Movimiento(i-2, j, TipoMovimiento.NORMAL));
+                        //primerTurno = false;
+                    }
                 }
             }
+
         }
            
         //Arriba izquierda
@@ -81,7 +83,7 @@ public class Peon extends Pieza
                     }
                     else
                     {    
-                        listaMovimientos.add(new Movimiento(i-1, j-1));
+                        listaMovimientos.add(new Movimiento(i-1, j-1, TipoMovimiento.CAPTURA));
                     }
                 }
             }
@@ -100,7 +102,7 @@ public class Peon extends Pieza
                     }
                     else
                     {    
-                        listaMovimientos.add(new Movimiento(i-1, j+1));
+                        listaMovimientos.add(new Movimiento(i-1, j+1, TipoMovimiento.CAPTURA));
                     }
                 }
             }
@@ -141,15 +143,15 @@ public class Peon extends Pieza
         {
             if(i < 7 && casillas.getCasillas()[i+1][j] == null)
             {
-                listaMovimientos.add(new Movimiento(i+1, j));
-            }
+                listaMovimientos.add(new Movimiento(i+1, j, TipoMovimiento.NORMAL));
 
-            if(primerTurno == true)
-            {
-                if(casillas.getCasillas()[i+2][j] == null)
+                if(primerTurno == true)
                 {
-                    listaMovimientos.add(new Movimiento(i+2, j));
-                    //primerTurno = false;
+                    if(casillas.getCasillas()[i+2][j] == null)
+                    {
+                        listaMovimientos.add(new Movimiento(i+2, j, TipoMovimiento.NORMAL));
+                        //primerTurno = false;
+                    }
                 }
             }
         }
@@ -167,7 +169,7 @@ public class Peon extends Pieza
                     }
                     else
                     {
-                        listaMovimientos.add(new Movimiento(i+1, j-1));
+                        listaMovimientos.add(new Movimiento(i+1, j-1, TipoMovimiento.CAPTURA));
                     }
                 }
             }
@@ -185,7 +187,7 @@ public class Peon extends Pieza
                     }
                     else
                     {
-                        listaMovimientos.add(new Movimiento(i+1, j+1));
+                        listaMovimientos.add(new Movimiento(i+1, j+1, TipoMovimiento.CAPTURA));
                     }
                 }
             }

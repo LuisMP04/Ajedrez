@@ -1,6 +1,7 @@
 package Piezas;
 
 import Reglas.Jaqueable;
+import Reglas.TipoMovimiento;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ public class Rey extends Pieza implements Jaqueable
     private boolean mate = false;
     private int cantidadAtacantes = 0;
     private Pieza atacante = null;
+    private boolean puedeEnrocar = true;
 
     public Rey(int bando)
     {   
@@ -37,6 +39,16 @@ public class Rey extends Pieza implements Jaqueable
     public void setAtacante(Pieza atacante)
     {
         this.atacante = atacante;
+    }
+
+    public boolean getPuedeEnrocar()
+    {
+        return puedeEnrocar;
+    }
+
+    public void setMovimientoEnroque(int i, int j, TipoMovimiento enroque)
+    {
+        listaMovimientos.add(new Movimiento(i, j, enroque));
     }
 
     public Pieza getPiezaAtacante()
@@ -65,7 +77,7 @@ public class Rey extends Pieza implements Jaqueable
     {
         if(jaque == 0)
         {
-            System.out.println("El rey está en jaque");
+            //System.out.println("El rey está en jaque");
             jaque = 1;
         }
     }
@@ -90,9 +102,14 @@ public class Rey extends Pieza implements Jaqueable
     {
         if(jaque != 0)
         {
-            System.out.println("El rey no está en jaque");
+            //System.out.println("El rey no está en jaque");
             jaque = 0;
         }
+    }
+
+    public boolean verificarCasilla(Tablero casillas, int i, int j)
+    {
+        return casillasAtacadas(casillas, i, j);
     }
 
     // Función que retorna true si la casilla está atacada o false si no lo está
@@ -693,14 +710,6 @@ public class Rey extends Pieza implements Jaqueable
         return false;
     }
 
-    /*--- Nota ---*/
-    //primera parte del pre procesamiento hecha
-    //falta verificar los tipos de piezas para calcular las casillas en las que
-    //las piezas están clavadas (del mismo bando)
-    //o las piezas no pueden ser comidas (del bando contrario)
-    //una vez hecho eso, se desabilitan las casillas clavadas
-    //y sigue el procesamiento (calcularMovimientos)
-
     @Override
     public void actualizarMovimientos(Tablero casillas)
     {
@@ -716,14 +725,14 @@ public class Rey extends Pieza implements Jaqueable
         if((i+1 <= 7 && j+1 <= 7) && 
             casillas.getCasillas()[i+1][j+1] == null)
         {
-            listaMovimientos.add(new Movimiento((i+1), (j+1)));
+            listaMovimientos.add(new Movimiento((i+1), (j+1), TipoMovimiento.NORMAL));
             //listaMovimientos.add(new Movimiento((i+1), (j)));
         }
         else if((i+1 <= 7 && j+1 <= 7) && 
             casillas.getCasillas()[i+1][j+1] != null &&
             casillas.getCasillas()[i+1][j+1].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i+1), (j+1)));
+            listaMovimientos.add(new Movimiento((i+1), (j+1), TipoMovimiento.CAPTURA));
             //listaMovimientos.add(new Movimiento((i+1), (j)));
 
         }
@@ -732,14 +741,14 @@ public class Rey extends Pieza implements Jaqueable
         if((i+1 <= 7 && j-1 >= 0) &&
             casillas.getCasillas()[i+1][j-1] == null)
         {
-            listaMovimientos.add(new Movimiento((i+1), (j-1)));
+            listaMovimientos.add(new Movimiento((i+1), (j-1), TipoMovimiento.NORMAL));
             //listaMovimientos.add(new Movimiento((i), (j-1)));
         }
         else if((i+1 <= 7 && j-1 >= 0) &&
             casillas.getCasillas()[i+1][j-1] != null &&
             casillas.getCasillas()[i+1][j-1].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i+1), (j-1)));
+            listaMovimientos.add(new Movimiento((i+1), (j-1), TipoMovimiento.CAPTURA));
             //listaMovimientos.add(new Movimiento((i), (j-1)));
         }
         
@@ -747,14 +756,14 @@ public class Rey extends Pieza implements Jaqueable
         if((i-1 >= 0 && j-1 >= 0) &&
             casillas.getCasillas()[i-1][j-1] == null)
         {
-            listaMovimientos.add(new Movimiento((i-1), (j-1)));
+            listaMovimientos.add(new Movimiento((i-1), (j-1), TipoMovimiento.NORMAL));
             //listaMovimientos.add(new Movimiento((i-1), (j)));
         }
         else if((i-1 >= 0 && j-1 >= 0) &&
             casillas.getCasillas()[i-1][j-1] != null &&
             casillas.getCasillas()[i-1][j-1].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i-1), (j-1)));
+            listaMovimientos.add(new Movimiento((i-1), (j-1), TipoMovimiento.CAPTURA));
             //listaMovimientos.add(new Movimiento((i-1), (j)));
         }
 
@@ -762,80 +771,68 @@ public class Rey extends Pieza implements Jaqueable
         if((i-1 >= 0 && j+1 <= 7) &&
             casillas.getCasillas()[i-1][j+1] == null)
         {
-            listaMovimientos.add(new Movimiento((i-1), (j+1)));
-            //listaMovimientos.add(new Movimiento((i), (j+1)));
+            listaMovimientos.add(new Movimiento((i-1), (j+1), TipoMovimiento.NORMAL));
         }
         else if((i-1 >= 0 && j+1 <= 7) &&
             casillas.getCasillas()[i-1][j+1] != null &&
             casillas.getCasillas()[i-1][j+1].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i-1), (j+1)));
-            //listaMovimientos.add(new Movimiento((i), (j+1)));
+            listaMovimientos.add(new Movimiento((i-1), (j+1), TipoMovimiento.CAPTURA));
         }
 
         //Arriba (-i)
         if(i-1 >= 0 &&
             casillas.getCasillas()[i-1][j] == null)
         {
-            listaMovimientos.add(new Movimiento((i-1), (j)));
+            listaMovimientos.add(new Movimiento((i-1), (j), TipoMovimiento.NORMAL));
         }
         else if(i-1 >= 0 &&
             casillas.getCasillas()[i-1][j] != null &&
             casillas.getCasillas()[i-1][j].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i-1), (j)));
+            listaMovimientos.add(new Movimiento((i-1), (j), TipoMovimiento.CAPTURA));
         }
 
         //Abajo (+i)
         if(i+1 <= 7 &&
             casillas.getCasillas()[i+1][j] == null)
         {
-            listaMovimientos.add(new Movimiento((i+1), (j)));
+            listaMovimientos.add(new Movimiento((i+1), (j), TipoMovimiento.NORMAL));
         }
         else if(i+1 <= 7 &&
             casillas.getCasillas()[i+1][j] != null &&
             casillas.getCasillas()[i+1][j].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i+1), (j)));
+            listaMovimientos.add(new Movimiento((i+1), (j), TipoMovimiento.CAPTURA));
         }
 
         //Derecha (+j)
         if(j+1 <= 7 &&
             casillas.getCasillas()[i][j+1] == null)
         {
-            listaMovimientos.add(new Movimiento((i), (j+1)));
+            listaMovimientos.add(new Movimiento((i), (j+1), TipoMovimiento.NORMAL));
         }
         else if(j+1 <= 7 &&
             casillas.getCasillas()[i][j+1] != null &&
             casillas.getCasillas()[i][j+1].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i), (j+1)));
+            listaMovimientos.add(new Movimiento((i), (j+1), TipoMovimiento.CAPTURA));
         }
 
         //Izquierda (-j)
         if(j-1 >= 0 &&
             casillas.getCasillas()[i][j-1] == null)
         {
-            listaMovimientos.add(new Movimiento((i), (j-1)));
+            listaMovimientos.add(new Movimiento((i), (j-1), TipoMovimiento.NORMAL));
         }
         else if(j-1 >= 0 &&
             casillas.getCasillas()[i][j-1] != null &&
             casillas.getCasillas()[i][j-1].getBando() != this.bando)
         {
-            listaMovimientos.add(new Movimiento((i), (j-1)));
+            listaMovimientos.add(new Movimiento((i), (j-1), TipoMovimiento.CAPTURA));
         }
 
         invalidarCasillasAtacadas(casillas);
-
-        //Verificar si hay mate (falta el rey ahogado)
-        /*if(jaque == 1 && listaMovimientos.isEmpty())
-        {
-            mate = true;
-        }
-        else
-        {
-            mate = false;
-        }*/
     }
 
     public void calcularMovimientosN(Tablero casillas)
@@ -844,6 +841,108 @@ public class Rey extends Pieza implements Jaqueable
     }
 
     protected void reiniciarDirecciones(){}
+
+    @Override
+    public void mover(int posX, int posY, Tablero casillas)
+    {
+        boolean valido = false;
+        for(Movimiento m : listaMovimientos)
+        {
+            if(m.i == posX && m.j == posY)
+            {
+                valido = true;
+                break;
+            }
+        }
+
+        if(valido)
+        {
+            int i = posicion[0];
+            int j = posicion[1];
+            posicion[0] = posX;
+            posicion[1] = posY;
+            casillas.getCasillas()[posX][posY] = this;
+            reiniciarMovimientos();
+            casillas.getCasillas()[i][j] = null;
+
+            //Verificar si se hizo un enroque
+            if(puedeEnrocar == true)
+            {
+                if(bando == 0)
+                {
+                    if(posX == 7 && posY == 1)      //Enroque largo
+                    {
+                        //buscar la torre
+                        Torre torre = null;
+                        if(casillas.getCasillas()[7][0] != null && casillas.getCasillas()[7][0].getTipoPieza() == TipoPieza.TORRE)
+                        {
+                            torre = (Torre) casillas.getCasillas()[7][0];
+                        }
+
+                        if(torre != null)
+                        {
+                            //Mover la torre
+                            torre.forzarMovimiento(7, 2, casillas);
+                        }
+                    }
+                    else if(posX == 7 && posY == 6) //Enroque corto
+                    {
+                        //buscar la torre
+                        Torre torre = null;
+                        if(casillas.getCasillas()[7][7] != null && casillas.getCasillas()[7][7].getTipoPieza() == TipoPieza.TORRE)
+                        {
+                            torre = (Torre) casillas.getCasillas()[7][7];
+                        }
+
+                        if(torre != null)
+                        {
+                            //Mover la torre
+                            torre.forzarMovimiento(7, 5, casillas);
+                        }
+                    }
+                }
+                else
+                {
+                    if(posX == 0 && posY == 1)      //Enroque largo
+                    {
+                        //buscar la torre
+                        Torre torre = null;
+                        if(casillas.getCasillas()[0][0] != null && casillas.getCasillas()[0][0].getTipoPieza() == TipoPieza.TORRE)
+                        {
+                            torre = (Torre) casillas.getCasillas()[0][0];
+                        }
+
+                        if(torre != null)
+                        {
+                            //Mover la torre
+                            torre.forzarMovimiento(0, 2, casillas);
+                        }
+                    }
+                    else if(posX == 0 && posY == 6) //Enroque corto
+                    {
+                        //buscar la torre
+                        Torre torre = null;
+                        if(casillas.getCasillas()[0][7] != null && casillas.getCasillas()[0][7].getTipoPieza() == TipoPieza.TORRE)
+                        {
+                            torre = (Torre) casillas.getCasillas()[0][7];
+                        }
+
+                        if(torre != null)
+                        {
+                            //Mover la torre
+                            torre.forzarMovimiento(0, 5, casillas);
+                        }
+                    }
+                }
+            }
+
+            puedeEnrocar = false;
+        }
+        else
+        {
+            System.out.println("Movimiento a " + (8 - posX) + "|" + (char)(posY+65) + " no valido");
+        }
+    }
 
     @Override
     public String toString()

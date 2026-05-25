@@ -1,12 +1,14 @@
 package Piezas;
 
 import Reglas.DireccionRayo;
+import Reglas.TipoMovimiento;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 
 public class Torre extends Pieza
 {
     private DireccionRayo[] direcciones = new DireccionRayo[4];
+    private boolean puedeEnrocar = true;
 
     public Torre(int bando)
     {
@@ -20,6 +22,11 @@ public class Torre extends Pieza
         super(bando, i, j);
         tipoPieza = TipoPieza.TORRE;
         reiniciarDirecciones();
+    }
+
+    public boolean getPuedeEnrocar()
+    {
+        return puedeEnrocar;
     }
 
     @Override
@@ -99,12 +106,12 @@ public class Torre extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.NORMAL));
                 }
 
                 movi -= 1;
@@ -139,12 +146,12 @@ public class Torre extends Pieza
                     }
 
 
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.NORMAL));
                 }
 
                 movj += 1;
@@ -178,12 +185,12 @@ public class Torre extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(i, movj));
+                    listaMovimientos.add(new Movimiento(i, movj, TipoMovimiento.NORMAL));
                 }
 
                 movj -= 1;
@@ -217,12 +224,12 @@ public class Torre extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, j));
+                    listaMovimientos.add(new Movimiento(movi, j, TipoMovimiento.NORMAL));
                 }
 
                 movi += 1;
@@ -402,6 +409,47 @@ public class Torre extends Pieza
         direcciones[1] = DireccionRayo.ABAJO;
         direcciones[2] = DireccionRayo.DERECHA;
         direcciones[3] = DireccionRayo.IZQUIERDA;
+    }
+
+    @Override
+    public void mover(int posX, int posY, Tablero casillas)
+    {
+        boolean valido = false;
+        for(Movimiento m : listaMovimientos)
+        {
+            if(m.i == posX && m.j == posY)
+            {
+                valido = true;
+                break;
+            }
+        }
+
+        if(valido)
+        {
+            int i = posicion[0];
+            int j = posicion[1];
+            posicion[0] = posX;
+            posicion[1] = posY;
+            casillas.getCasillas()[posX][posY] = this;
+            reiniciarMovimientos();
+            casillas.getCasillas()[i][j] = null;
+            puedeEnrocar = false;
+        }
+        else
+        {
+            System.out.println("Movimiento a " + (8 - posX) + "|" + (char)(posY+65) + " no valido");
+        }
+    }
+
+    public void forzarMovimiento(int posI, int posJ, Tablero casillas)
+    {
+        int i = posicion[0];
+        int j = posicion[1];
+        posicion[0] = posI;
+        posicion[1] = posJ;
+        casillas.getCasillas()[posI][posJ] = this;
+        reiniciarMovimientos();
+        casillas.getCasillas()[i][j] = null;
     }
 
     @Override

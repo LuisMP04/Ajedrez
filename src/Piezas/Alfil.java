@@ -1,6 +1,7 @@
 package Piezas;
 
 import Reglas.DireccionRayo;
+import Reglas.TipoMovimiento;
 import Tablero.Movimiento;
 import Tablero.Tablero;
 
@@ -100,12 +101,12 @@ public class Alfil extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
     
                 movi -= 1;
@@ -141,12 +142,12 @@ public class Alfil extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
 
                 movi += 1;
@@ -182,12 +183,12 @@ public class Alfil extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
                 movi += 1;
                 movj -= 1;
@@ -222,12 +223,12 @@ public class Alfil extends Pieza
                         break;
                     }
 
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.CAPTURA));
                     break;
                 }
                 else
                 {
-                    listaMovimientos.add(new Movimiento(movi, movj));
+                    listaMovimientos.add(new Movimiento(movi, movj, TipoMovimiento.NORMAL));
                 }
 
                 movi -= 1;

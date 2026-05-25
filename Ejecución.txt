@@ -1,0 +1,17 @@
+// Unicamente del motor de ajedrez
+* Desde src:
+
+javac *.java .\PatronComando\*.java .\Piezas\*.java .\Reglas\*.java .\Tablero\*.java .\Motor\*.java
+
+* Para ejecutar:
+
+java main
+
+// Crear los .class de TODO el proyecto
+* Desde raiz:
+
+javac --module-path "C:\tools\javafx-sdk-26.0.1\lib" --add-modules javafx.controls -d out src\Motor\*.java src\Tablero\*.java src\PatronComando\*.java src\Piezas\*.java src\Reglas\*.java gui\Main.java
+
+* Para ejecutar:
+
+java --module-path "C:\tools\javafx-sdk-26.0.1\lib" --add-modules javafx.controls -cp out gui.Main
