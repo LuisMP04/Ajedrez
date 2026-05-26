@@ -457,8 +457,8 @@ public class Torre extends Pieza
     {
         if(bando == 0)
         {
-            return "tB"; //alfil blanco
+            return "♖"; //alfil blanco
         }
-        return "tN"; //alfil negro
+        return "♜"; //alfil negro
     }
 }

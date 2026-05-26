@@ -4,6 +4,8 @@ import Motor.Motor;
 import Piezas.Pieza;
 import Tablero.Movimiento;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -19,9 +21,10 @@ import javafx.stage.Stage;
 import javafx.animation.TranslateTransition;
 import javafx.animation.Interpolator;
 import javafx.util.Duration;
+import javafx.application.Platform;
 
-public class Main extends Application {
-
+public class Main extends Application 
+{
     private static final int SIZE = 8;
     private static final int TILE_SIZE = 80;
 
@@ -41,13 +44,18 @@ public class Main extends Application {
     private Motor motor = new Motor();
     private GridPane board = new GridPane();
     private Pane pieceLayer = new Pane(); // Capa superior para que las piezas se muevan libremente
+    private Stage stage;
+    private int turno = 0;
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) 
+    {
+        this.stage = stage;
 
         createBoard();
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < SIZE; i++) 
+        {
             board.getRowConstraints().add(new RowConstraints(TILE_SIZE));
             board.getColumnConstraints().add(new ColumnConstraints(TILE_SIZE));
         }
@@ -60,7 +68,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
 
-        stage.setTitle("Ajedrez JavaFX - Animado Easy In-Out");
+        stage.setTitle("Ajedrez - Lemposo");
         stage.setScene(scene);
         stage.show();
 
@@ -70,9 +78,12 @@ public class Main extends Application {
     // =========================
     // TABLERO FIJO
     // =========================
-    private void createBoard() {
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
+    private void createBoard() 
+    {
+        for (int row = 0; row < SIZE; row++) 
+        {
+            for (int col = 0; col < SIZE; col++) 
+            {
 
                 StackPane tile = new StackPane();
                 tiles[row][col] = tile;
@@ -105,14 +116,22 @@ public class Main extends Application {
     // =========================
     // CLICK
     // =========================
-    private void handleClick(int row, int col) {
+    private void handleClick(int row, int col) 
+    {
         if (animating) return; // Evita clics locos mientras se mueve una pieza
 
         Pieza p = motor.getPieza(row, col);
 
         // seleccionar pieza
-        if (!hasSelection) {
+        if (!hasSelection) 
+        {
             if (p == null) return;
+
+            // SOLO permitir seleccionar piezas del turno actual
+            if(p.getBando() != turno)
+            {
+                return;
+            }
 
             selectedRow = row;
             selectedCol = col;
@@ -126,22 +145,30 @@ public class Main extends Application {
         ArrayList<Movimiento> movimientos = motor.getMovimientos(selectedRow, selectedCol);
         boolean valido = false;
 
-        for (Movimiento m : movimientos) {
-            if (m.i == row && m.j == col) {
+        for (Movimiento m : movimientos) 
+        {
+            if (m.i == row && m.j == col) 
+            {
                 valido = true;
                 break;
             }
         }
 
-        if (valido) {
+        if (valido) 
+        {
             animateMovement(selectedRow, selectedCol, row, col);
-        } else {
+        } 
+        else 
+        {
             // Si hace clic en otra de sus propias piezas, cambiamos la selección directamente
-            if (p != null) {
+            if (p != null) 
+            {
                 selectedRow = row;
                 selectedCol = col;
                 hasSelection = true;
-            } else {
+            } 
+            else 
+            {
                 hasSelection = false;
                 selectedRow = -1;
                 selectedCol = -1;
@@ -153,10 +180,12 @@ public class Main extends Application {
     // =========================
     // ANIMACIÓN EASY IN-OUT
     // =========================
-    private void animateMovement(int fromRow, int fromCol, int toRow, int toCol) {
+    private void animateMovement(int fromRow, int fromCol, int toRow, int toCol) 
+    {
         Text movingPiece = pieceViews[fromRow][fromCol];
 
-        if (movingPiece == null) {
+        if (movingPiece == null) 
+        {
             ejecutarMovimientoLogico(fromRow, fromCol, toRow, toCol);
             return;
         }
@@ -184,8 +213,13 @@ public class Main extends Application {
         transition.play();
     }
 
-    private void ejecutarMovimientoLogico(int fromRow, int fromCol, int toRow, int toCol) {
+    private void ejecutarMovimientoLogico(int fromRow, int fromCol, int toRow, int toCol) 
+    {
         motor.mover(fromRow, fromCol, toRow, toCol);
+
+        // cambiar turno
+        turno = (turno == 0) ? 1 : 0;
+
         motor.turno();
         
         hasSelection = false;
@@ -193,16 +227,36 @@ public class Main extends Application {
         selectedCol = -1;
         
         updateBoard();
+
+        //Verifica si la partida ha terminado
+        if(motor.terminarPartida())
+        {
+            Platform.runLater(() -> {
+
+                Alert alert = new Alert(AlertType.INFORMATION);
+
+                alert.setTitle("Fin de la partida");
+                alert.setHeaderText(null);
+                //alert.setContentText("Jaque mate");
+
+                alert.showAndWait();
+
+                stage.close();
+            });
+        }
     }
 
     // =========================
     // RENDER
     // =========================
-    private void updateBoard() {
+    private void updateBoard() 
+    {
         pieceLayer.getChildren().clear();
 
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
+        for (int row = 0; row < SIZE; row++) 
+        {
+            for (int col = 0; col < SIZE; col++) 
+            {
 
                 Rectangle square = squares[row][col];
                 pieceViews[row][col] = null;
@@ -215,9 +269,13 @@ public class Main extends Application {
 
                 Pieza p = motor.getPieza(row, col);
 
-                if (p != null) {
+                if (p != null) 
+                {
                     Text t = new Text(p.toString());
-                    t.setStyle("-fx-font-size: 36px;"); // Un poco más grande para que luzca mejor
+                    t.setStyle("""
+                        -fx-font-size: 42px;
+                        -fx-font-family: 'Segoe UI Symbol';
+                    """);
                     
                     // IMPORTANTE: Hace que el texto ignore los clics por completo
                     t.setMouseTransparent(true); 
@@ -231,12 +289,16 @@ public class Main extends Application {
                 }
 
                 // pintar movimientos SOLO si hay selección
-                if (hasSelection) {
+                if (hasSelection) 
+                {
                     ArrayList<Movimiento> movimientos = motor.getMovimientos(selectedRow, selectedCol);
 
-                    for (Movimiento m : movimientos) {
-                        if (m.i == row && m.j == col) {
-                            switch (m.tipoMov) {
+                    for (Movimiento m : movimientos) 
+                    {
+                        if (m.i == row && m.j == col) 
+                        {
+                            switch (m.tipoMov) 
+                            {
                                 case NORMAL -> square.setFill(Color.web("#9effd7"));
                                 case CAPTURA -> square.setFill(Color.web("#ffa8a8"));
                                 case ENROQUE -> square.setFill(Color.web("#ffefb0"));
@@ -255,15 +317,18 @@ public class Main extends Application {
     // =========================
     // SELECCIÓN
     // =========================
-    private void repaintSelection() {
-        if (hasSelection && selectedRow != -1 && selectedCol != -1) {
+    private void repaintSelection() 
+    {
+        if (hasSelection && selectedRow != -1 && selectedCol != -1) 
+        {
             Rectangle square = squares[selectedRow][selectedCol];
             square.setStroke(Color.web("#ae5db9"));
             square.setStrokeWidth(3);
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         launch(args);
     }
 }

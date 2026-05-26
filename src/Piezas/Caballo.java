@@ -149,8 +149,8 @@ public class Caballo extends Pieza
     {
         if(bando == 0)
         {
-            return "cB"; //alfil blanco
+            return "♘"; //alfil blanco
         }
-        return "cN"; //alfil negro
+        return "♞"; //alfil negro
     } 
 }

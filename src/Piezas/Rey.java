@@ -12,7 +12,6 @@ public class Rey extends Pieza implements Jaqueable
     //private ArrayList<Movimiento> casillasBloqueadas = new ArrayList<>();
     private int jaque = 0;  //0 = no jaque, 1 = jaque
     private boolean ahogado = false;
-    private boolean mate = false;
     private int cantidadAtacantes = 0;
     private Pieza atacante = null;
     private boolean puedeEnrocar = true;
@@ -949,8 +948,8 @@ public class Rey extends Pieza implements Jaqueable
     {
         if(bando == 0)
         {
-            return "rB"; //dama blanca
+            return "♔"; //dama blanca
         }
-        return "rN"; //dama negra
+        return "♚"; //dama negra
     }
 }

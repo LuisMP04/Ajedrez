@@ -760,8 +760,8 @@ public class Dama extends Pieza
     {
         if(bando == 0)
         {
-            return "dB"; //dama blanca
+            return "♕"; //dama blanca
         }
-        return "dN"; //dama negra
+        return "♛"; //dama negra
     }
 }

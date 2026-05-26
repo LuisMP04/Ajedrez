@@ -187,30 +187,10 @@ public class Peon extends Pieza
                     }
                     else
                     {
+
                         listaMovimientos.add(new Movimiento(i+1, j+1, TipoMovimiento.CAPTURA));
                     }
                 }
-            }
-        }
-    }
-
-    public void coronar()
-    {
-        //codigo para coronar peon
-        if(bando == 0)
-        {
-            if(posicion[0] == 0)
-            {
-                //Seleccionar nueva pieza
-                
-            }
-        }
-        else
-        {
-            if(posicion[0] == 7)
-            {
-                //Seleccionar nueva pieza
-
             }
         }
     }
@@ -270,8 +250,8 @@ public class Peon extends Pieza
     {
         if(bando == 0)
         {
-            return "pB"; //peon blanco
+            return "♙"; //peon blanco
         }
-        return "pN"; //peon negro
+        return "♟"; //peon negro
     }
 }

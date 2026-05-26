@@ -433,8 +433,8 @@ public class Alfil extends Pieza
     {
         if(bando == 0)
         {
-            return "aB"; //alfil blanco
+            return "♗"; //alfil blanco
         }
-        return "aN"; //alfil negro
+        return "♝"; //alfil negro
     } 
 }

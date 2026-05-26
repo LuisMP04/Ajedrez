@@ -12,6 +12,7 @@ public class Jugadas implements Comando
 {
     //private ArrayList<Pieza> piezas = new ArrayList();
     private Tablero casillas;
+    private boolean finPartida = false;
 
     public Jugadas(Tablero casillas)
     {
@@ -24,13 +25,22 @@ public class Jugadas implements Comando
         reiniciarMovimientos();
         reiniciarClavadas();
 
+        verificarCoronacion();
+
         actualizarMovimientos();
 
+        finPartida |= verificarTablas();
         verificarJaque();
         verificarEnroque();
-        verificarAhogado();
+        finPartida |= verificarAhogado();
+        finPartida |= verificarMate();
 
         casillas.mostrarTablero();
+    }
+
+    public boolean getFinPartida()
+    {
+        return finPartida;
     }
 
     //Comandos
@@ -150,17 +160,21 @@ public class Jugadas implements Comando
         return true;
     }
 
-    public void verificarAhogado()
+    public boolean verificarAhogado()
     {
         if(ahogado(0))
         {
             System.out.println("Rey blanco ahogado");
+            return true;
         }
 
         if(ahogado(1))
         {
             System.out.println("Rey negro ahogado");
+            return true;
         }
+
+        return false;
     }
 
     public void reiniciarCantidadAtacantes()
@@ -525,6 +539,25 @@ public class Jugadas implements Comando
         return false;
     }
 
+    public boolean verificarTablas()
+    {
+        Pieza[][] piezas = casillas.getCasillas();
+        //Buscar alguna pieza diferente a los dos reyes, si no hay ninguna, significa que solo quedan los dos reyes, por lo tanto tablas
+        int j;
+        for(int i = 0; i < 8; i++)
+        {
+            for(j = 0; j < 8; j++)
+            {
+                if(piezas[i][j] != null && piezas[i][j].getTipoPieza() != TipoPieza.REY)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     private ArrayList<Movimiento> busquedaRayo(int inicioI, int inicioJ, int direccionI, int direccionJ, int finalI, int finalJ)
     {
         ArrayList<Movimiento> movimientos = new ArrayList<>();
@@ -545,5 +578,94 @@ public class Jugadas implements Comando
         }
 
         return movimientos;
+    }
+
+    public boolean verificarMate()
+    {
+        if(mate(0))
+        {
+            System.out.println("JAQUE MATE AL REY BLANCO");
+            return true;
+        }
+
+        if(mate(1))
+        {
+            System.out.println("JAQUE MATE AL REY NEGRO");
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean mate(int bando)
+    {
+        Pieza[][] piezas = casillas.getCasillas();
+
+        Rey rey = null;
+        ArrayList<Pieza> vivas = new ArrayList<>();
+
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                if(piezas[i][j] != null &&
+                piezas[i][j].getBando() == bando)
+                {
+                    vivas.add(piezas[i][j]);
+
+                    if(piezas[i][j].getTipoPieza() == TipoPieza.REY)
+                    {
+                        rey = (Rey)piezas[i][j];
+                    }
+                }
+            }
+        }
+
+        // Si no está en jaque, no es mate
+        if(rey == null || rey.getJaque() == 0)
+        {
+            return false;
+        }
+
+        // Si alguna pieza tiene movimientos, no es mate
+        for(Pieza p : vivas)
+        {
+            if(!p.getListaMovimientos().isEmpty())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void verificarCoronacion()
+    {
+        //Como solo se puede coronar un peon en cada turno, buscar peones en fila 0 y 7
+        Pieza[][] piezas = casillas.getCasillas();
+        int j;
+        for(j = 0; j < 8; j++)
+        {
+            //buscar peones blancos
+            if(piezas[0][j] != null)
+            {
+                if(piezas[0][j].getTipoPieza() == TipoPieza.PEON && piezas[0][j].getBando() == 0)
+                {
+                    piezas[0][j] = new Dama(0, 0, j);
+                }
+            }
+        }
+
+        for(j = 0; j < 8; j++)
+        {
+            //buscar peones negros
+            if(piezas[7][j] != null)
+            {
+                if(piezas[7][j].getTipoPieza() == TipoPieza.PEON && piezas[7][j].getBando() == 1)
+                {
+                    piezas[7][j] = new Dama(1, 7, j);
+                }
+            }
+        }
     }
 }

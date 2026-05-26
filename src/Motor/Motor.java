@@ -1,11 +1,10 @@
 package Motor;
 
-import java.util.ArrayList;
-
 import PatronComando.Jugadas;
 import Piezas.*;
 import Tablero.Movimiento;
 import Tablero.Tablero;
+import java.util.ArrayList;
 
 public class Motor 
 {
@@ -46,5 +45,10 @@ public class Motor
         Pieza p = tablero.getPieza(fila, col);
         if(p == null) return new ArrayList<>();
         return p.getListaMovimientos();
+    }
+
+    public boolean terminarPartida()
+    {
+        return comandos.getFinPartida();
     }
 }
